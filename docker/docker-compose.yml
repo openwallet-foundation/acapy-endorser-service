@@ -1,4 +1,3 @@
-version: "3.9"
 services:
   aries-endorser-proxy:
     image: caddy
