@@ -12,7 +12,7 @@ ENV POETRY_VIRTUALENVS_CREATE=false
 RUN pip install --no-cache-dir poetry
 
 ADD pyproject.toml poetry.lock ./
-RUN poetry install --no-dev
+RUN poetry install --without dev
 
 ADD ./endorser .
 
