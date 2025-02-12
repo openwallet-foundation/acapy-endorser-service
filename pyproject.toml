@@ -26,7 +26,7 @@ pydantic-settings = "^2.2.1"
 python-jose = {version = "^3.3.0", extras = ["cyptography"]}
 requests = "^2.32.3"
 SQLAlchemy = {version = "^2.0.30", extras = ["asyncio"]}
-sqlmodel = "0.0.19" # see https://github.com/fastapi/sqlmodel/discussions/1048 before upgrading
+sqlmodel = "0.0.22" # see https://github.com/fastapi/sqlmodel/discussions/1048 before upgrading
 starlette-context = "^0.3.6"
 
 [tool.poetry.group.dev.dependencies]
