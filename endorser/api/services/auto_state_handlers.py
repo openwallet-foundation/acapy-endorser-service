@@ -320,6 +320,12 @@ async def is_endorsable_transaction(
                     ),
                 )
 
+            case EndorseTransactionType.attrib:
+                logger.debug(
+                    f">>> from is_endorsable_transaction: {trans} was an attrib request"
+                )
+                return True
+
         return False
 
 
