@@ -196,6 +196,7 @@ async def is_endorsable_transaction(
     if (
         trans.author_goal_code == "aries.transaction.register_public_did"
         or trans.transaction_type == EndorseTransactionType.did
+        or trans.transaction_type == EndorseTransactionType.attrib
     ):
         return await allowed_publish_did(
             db,
@@ -319,12 +320,6 @@ async def is_endorsable_transaction(
                         Tag=cast(str, trans.transaction.get("tag")),
                     ),
                 )
-
-            case EndorseTransactionType.attrib:
-                logger.debug(
-                    f">>> from is_endorsable_transaction: {trans} was an attrib request"
-                )
-                return True
 
         return False
 
