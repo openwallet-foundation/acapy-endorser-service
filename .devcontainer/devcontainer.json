@@ -57,9 +57,13 @@
 
   "mounts": [],
   "postCreateCommand": "bash ./.devcontainer/post-install.sh",
+  "forwardPorts": [5050, 9000],
   "portsAttributes": {
     "5050": {
       "label": "endorser-api"
+    },
+    "9000": {
+      "label": "ledger-browser"
     }
   }
 }
