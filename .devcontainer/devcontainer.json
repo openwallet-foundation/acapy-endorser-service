@@ -39,9 +39,7 @@
         "ruff.codeAction.fixViolation": {
           "enable": true
         },
-        "ruff.fixAll": true,
-        "ruff.format.args": ["--config=./pyproject.toml"],
-        "ruff.lint.args": ["--config=./pyproject.toml"]
+        "ruff.fixAll": true
       }
     }
   },
