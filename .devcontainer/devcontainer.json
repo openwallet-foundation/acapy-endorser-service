@@ -6,7 +6,7 @@
     "dockerfile": "Dockerfile",
     "context": "..",
     "args": {
-      "VARIANT": "3.12-bullseye",
+      "VARIANT": "3.13-bullseye",
       "POETRY_VERSION": "2.0.0"
     }
   },
@@ -39,9 +39,7 @@
         "ruff.codeAction.fixViolation": {
           "enable": true
         },
-        "ruff.fixAll": true,
-        "ruff.format.args": ["--config=./pyproject.toml"],
-        "ruff.lint.args": ["--config=./pyproject.toml"]
+        "ruff.fixAll": true
       }
     }
   },
@@ -59,9 +57,13 @@
 
   "mounts": [],
   "postCreateCommand": "bash ./.devcontainer/post-install.sh",
+  "forwardPorts": [5050, 9000],
   "portsAttributes": {
     "5050": {
       "label": "endorser-api"
+    },
+    "9000": {
+      "label": "ledger-browser"
     }
   }
 }
