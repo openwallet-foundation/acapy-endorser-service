@@ -223,7 +223,7 @@ services:
             --wallet-name '${ACAPY_AUTHOR_WALLET_DATABASE}' \
             --wallet-key '${ACAPY_AUTHOR_WALLET_ENCRYPTION_KEY}' \
             --wallet-storage-type '${ACAPY_AUTHOR_WALLET_STORAGE_TYPE}' \
-            --wallet-storage-config '{\"url\":\"${AUTHOR_WALLET_POSTGRESQL_HOST}:5432\",\"max_connections\":5,\"wallet_scheme\":\"MultiWalletSingleTable\"}' \
+            --wallet-storage-config '{\"url\":\"${AUTHOR_WALLET_POSTGRESQL_HOST}:5432\",\"max_connections\":100,\"wallet_scheme\":\"MultiWalletSingleTable\"}' \
             --wallet-storage-creds '{\"account\":\"${AUTHOR_WALLET_POSTGRESQL_USER}\",\"password\":\"${AUTHOR_WALLET_POSTGRESQL_PASSWORD}\",\"admin_account\":\"${AUTHOR_WALLET_POSTGRESQL_USER}\",\"admin_password\":\"${AUTHOR_WALLET_POSTGRESQL_PASSWORD}\"}' \
             --admin '0.0.0.0' ${ACAPY_AUTHOR_ADMIN_PORT} \
             --label '${AUTHOR_AGENT_NAME}' \
