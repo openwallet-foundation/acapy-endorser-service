@@ -1,3 +1,5 @@
+"""APIRouter module for managing endorser configurations in an async FastAPI context."""
+
 import logging
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -27,7 +29,17 @@ router = APIRouter()
 async def get_config(
     db: AsyncSession = Depends(get_db),
 ) -> dict:
-    # this should take some query params, sorting and paging params...
+    """Retrieve endorser configurations with optional sorting and paging.
+
+    Args:
+        db (AsyncSession): Database session dependency.
+
+    Returns:
+        dict: Endorser configurations.
+
+    Raises:
+        HTTPException: If an error occurs while retrieving configurations.
+    """
     try:
         endorser_configs = await get_endorser_configs(db)
         return endorser_configs
@@ -44,7 +56,8 @@ async def get_config_by_name(
     config_name: str,
     db: AsyncSession = Depends(get_db),
 ) -> Configuration:
-    # this should take some query params, sorting and paging params...
+    """Retrieve an endorser configuration by name asynchronously."""
+    # This should take some query params, sorting and paging params...
     try:
         endorser_config = await get_endorser_config(db, config_name)
         return endorser_config
@@ -62,9 +75,21 @@ async def update_config(
     config_value: str,
     db: AsyncSession = Depends(get_db),
 ) -> Configuration:
-    # throws an exception if we get an invalid config name
+    """Update the endorser configuration for the given config name and value.
+
+    Parameters:
+        config_name (str): The name of the configuration to update.
+        config_value (str): The new value for the configuration.
+        db (AsyncSession): Database session dependency.
+
+    Returns:
+        Configuration: The updated configuration object.
+
+    Raises:
+        HTTPException: If an error occurs during the update process.
+    """
     try:
-        config_type = ConfigurationType[config_name]
+        ConfigurationType[config_name]
         validate_endorser_config(config_name, config_value)
         endorser_config = await update_endorser_config(db, config_name, config_value)
         return endorser_config

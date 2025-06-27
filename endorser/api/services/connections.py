@@ -1,3 +1,11 @@
+"""This module provides database operations for to connections in the Endorser service.
+
+Key functionalities include adding, fetching, updating, and retrieving
+connection records while leveraging SQLAlchemy's asynchronous
+capabilities.
+
+"""
+
 import logging
 from typing import cast
 from uuid import UUID
@@ -25,12 +33,25 @@ logger = logging.getLogger(__name__)
 
 
 async def db_add_db_contact_record(db: AsyncSession, db_contact: Contact):
+    """Add a contact record to the database."""
     logger.debug(f">>> adding contact: {db_contact} ...")
     db.add(db_contact)
     await db.commit()
 
 
 async def db_fetch_db_contact_record(db: AsyncSession, connection_id: UUID) -> Contact:
+    """Fetch a contact record from the database for the given connection ID.
+
+    Args:
+        db (AsyncSession): The database session to use for the query.
+        connection_id (UUID): The ID of the connection to fetch the contact record for.
+
+    Raises:
+        DoesNotExist: If no contact record exists for the provided connection ID.
+
+    Returns:
+        Contact: The contact record associated with the given connection ID.
+    """
     logger.info(f">>> db_fetch_db_contact_record() for {connection_id}")
     q = select(Contact).where(Contact.connection_id == connection_id)
     result = await db.execute(q)
@@ -43,6 +64,15 @@ async def db_fetch_db_contact_record(db: AsyncSession, connection_id: UUID) -> C
 
 
 async def db_update_db_contact_record(db: AsyncSession, db_contact: Contact) -> Contact:
+    """Update a contact record in the database and return the updated contact.
+
+    Parameters:
+        db (AsyncSession): The database session to use for the update.
+        db_contact (Contact): The contact object containing updated information.
+
+    Returns:
+        Contact: The updated contact record from the database.
+    """
     payload_dict = db_contact.dict()
     q = (
         update(Contact)
@@ -61,6 +91,7 @@ async def db_get_contact_records(
     page_size: int = 10,
     page_num: int = 1,
 ) -> tuple[int, list[Contact]]:
+    """Retrieve paginated contact records filtered by state."""
     limit = page_size
     skip = (page_num - 1) * limit
     filters = []
@@ -90,6 +121,8 @@ async def get_connections_list(
     page_size: int = 10,
     page_num: int = 1,
 ) -> tuple[int, list[Connection]]:
+    """Retrieve a paginated list of connections from the database."""
+
     (count, db_contacts) = await db_get_contact_records(
         db,
         state=connection_state,
@@ -107,6 +140,15 @@ async def get_connection_object(
     db: AsyncSession,
     connection_id: UUID,
 ) -> Connection:
+    """Retrieve a connection object based on the provided connection ID.
+
+    Args:
+        db (AsyncSession): The database session to use for the query.
+        connection_id (UUID): The ID of the connection to retrieve.
+
+    Returns:
+        Connection: The corresponding connection object.
+    """
     logger.info(f">>> get_connection_object() for {connection_id}")
     db_contact: Contact = await db_fetch_db_contact_record(db, connection_id)
     item = db_to_connection_object(db_contact, acapy_connection=None)
@@ -116,6 +158,15 @@ async def get_connection_object(
 async def store_connection_request(
     db: AsyncSession, connection: Connection
 ) -> Connection:
+    """Store a connection request in the database.
+
+    Args:
+        db (AsyncSession): The database session for async operations.
+        connection (Connection): The connection object to be stored.
+
+    Returns:
+        Connection: The original connection object.
+    """
     logger.info(f">>> called store_connection_request with: {connection.connection_id}")
 
     db_contact: Contact = connection_to_db_object(connection)
@@ -128,6 +179,7 @@ async def store_connection_request(
 async def accept_connection_request(
     db: AsyncSession, connection: Connection
 ) -> Connection:
+    """Accepts a connection request and updates the corresponding database record."""
     logger.info(
         f">>> called accept_connection_request with: {connection.connection_id}"
     )
@@ -160,6 +212,7 @@ async def accept_connection_request(
 async def update_connection_status(
     db: AsyncSession, connection: Connection
 ) -> Connection:
+    """Update the status of a connection in the database."""
     logger.debug(
         f">>> called update_connection_status with: {connection.connection_id}"
     )
@@ -180,6 +233,7 @@ async def update_connection_status(
 async def set_connection_author_metadata(
     db: AsyncSession, connection: Connection
 ) -> dict:
+    """Set the endorser role metadata for a connection if not already set."""
     # confirm if we have already set the role on this connection
     connection_id = connection.connection_id
     logger.info(f">>> check for metadata on connection: {connection_id}")
@@ -204,6 +258,7 @@ async def set_connection_author_metadata(
 async def update_connection_info(
     db: AsyncSession, connection_id: UUID, alias: str, public_did: str | None = None
 ):
+    """Update the connection information for a specific contact."""
     # fetch existing db object
     db_contact: Contact = await db_fetch_db_contact_record(db, connection_id)
     db_contact.connection_alias = alias
@@ -220,6 +275,7 @@ async def update_connection_config(
     author_status: AuthorStatusType,
     endorse_status: EndorseStatusType,
 ):
+    """Update the configuration for a connection in the database."""
     # fetch existing db object
     db_contact: Contact = await db_fetch_db_contact_record(db, connection_id)
     db_contact.author_status = author_status.value

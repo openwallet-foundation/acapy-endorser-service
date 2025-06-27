@@ -1,3 +1,14 @@
+"""Module for handling endorsement transactions in the Aries Endorser Service.
+
+This module includes enumerations for endorser role types, transaction
+states and types, and models for representing and converting
+endorsement transactions between various forms, such as payloads,
+model objects, and database entities. It provides utility functions to
+convert transactions from webhooks or database objects into the
+endorser service's model format.
+
+"""
+
 from enum import Enum
 import json
 import logging
@@ -11,11 +22,15 @@ logger = logging.getLogger(__name__)
 
 
 class EndorserRoleType(str, Enum):
+    """Define roles for an Endorser in the transaction process."""
+
     Author = "TRANSACTION_AUTHOR"
     Endorser = "TRANSACTION_ENDORSER"
 
 
 class EndorseTransactionState(str, Enum):
+    """Enumerate possible states of an endorsement transaction."""
+
     transaction_created = "transaction_created"
     request_sent = "request_sent"
     request_received = "request_received"
@@ -28,6 +43,8 @@ class EndorseTransactionState(str, Enum):
 
 
 class EndorseTransactionType(str, Enum):
+    """Enumerate types of transactions for endorsement."""
+
     did = "1"
     attrib = "100"
     schema = "101"
@@ -37,6 +54,8 @@ class EndorseTransactionType(str, Enum):
 
 
 class EndorseTransaction(BaseModel):
+    """Represent an endorsement transaction."""
+
     author_goal_code: str | None = None
     connection_id: UUID
     transaction_id: UUID
@@ -52,6 +71,8 @@ class EndorseTransaction(BaseModel):
 
 
 class EndorseTransactionList(BaseModel):
+    """Contain a paginated list of endorsement transactions."""
+
     page_size: int
     page_num: int
     count: int
@@ -92,15 +113,21 @@ def webhook_to_txn_object(payload: dict, endorser_did: str) -> EndorseTransactio
         state=str(payload.get("state")),
         transaction_request=transaction_request,
         endorser_did=endorser_did,
-        author_did=transaction_request["identifier"]
-        if transaction_request and "identifier" in transaction_request
-        else None,
-        transaction=transaction_request["operation"]
-        if transaction_request and "operation" in transaction_request
-        else None,
-        transaction_type=transaction_request["operation"]["type"]
-        if transaction_request and "operation" in transaction_request
-        else None,
+        author_did=(
+            transaction_request["identifier"]
+            if transaction_request and "identifier" in transaction_request
+            else None
+        ),
+        transaction=(
+            transaction_request["operation"]
+            if transaction_request and "operation" in transaction_request
+            else None
+        ),
+        transaction_type=(
+            transaction_request["operation"]["type"]
+            if transaction_request and "operation" in transaction_request
+            else None
+        ),
         transaction_response=transaction_response,
     )
     logger.debug(f">>> to transaction: {transaction}")
@@ -134,7 +161,7 @@ def db_to_txn_object(
         transaction_request = json.loads(
             acapy_txn["messages_attach"][0]["data"]["json"]
         )
-        transaction = transaction_request.get("operation")
+        transaction_request.get("operation")
         if 0 < len(acapy_txn["signature_response"]):
             transaction_response = json.loads(
                 acapy_txn["signature_response"][0]["signature"][
@@ -146,9 +173,9 @@ def db_to_txn_object(
     else:
         transaction_response = {}
     txn: EndorseTransaction = EndorseTransaction(
-        author_goal_code=str(txn_request.author_goal_code)
-        if txn_request.author_goal_code
-        else None,
+        author_goal_code=(
+            str(txn_request.author_goal_code) if txn_request.author_goal_code else None
+        ),
         connection_id=txn_request.connection_id,
         transaction_id=txn_request.transaction_id,
         tags=txn_request.tags,
@@ -157,9 +184,11 @@ def db_to_txn_object(
         author_did=txn_request.author_did,
         created_at=str(txn_request.created_at),
         transaction=json.loads(txn_request.ledger_txn),
-        transaction_request=json.loads(txn_request.ledger_txn_request)
-        if txn_request.ledger_txn_request
-        else None,
+        transaction_request=(
+            json.loads(txn_request.ledger_txn_request)
+            if txn_request.ledger_txn_request
+            else None
+        ),
         transaction_type=txn_request.transaction_type,
         transaction_response=transaction_response,
     )

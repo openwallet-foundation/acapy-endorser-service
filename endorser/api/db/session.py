@@ -1,3 +1,10 @@
+"""This module configures the async SQLAlchemy database engine and session for the API.
+
+The module initializes the asynchronous database engine with settings drawn from
+the application configuration and a sessionmaker for handling database sessions. It
+supports database connection pooling and echoing of SQL statements for debugging.
+"""
+
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 

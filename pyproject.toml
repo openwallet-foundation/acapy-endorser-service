@@ -68,6 +68,7 @@ include = ["endorser/**/*.py"]
 
 line-length = 90
 
+exclude = ["migrations"]
 [tool.ruff.lint.per-file-ignores]
 "**/{tests}/*" = ["B006", "D", "E501", "F841"]
 

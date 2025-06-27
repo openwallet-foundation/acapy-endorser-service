@@ -1,3 +1,13 @@
+"""Configuration management for the Aries Endorser Service.
+
+This module handles the configuration settings for the Aries Endorser
+Service, providing classes and methods to manage configurations from
+different sources, such as environment variables, databases, and
+wallets. It includes conversion functions to translate between model
+objects and database representations.
+
+"""
+
 from enum import Enum
 import logging
 
@@ -10,6 +20,8 @@ logger = logging.getLogger(__name__)
 
 
 class ConfigurationType(str, Enum):
+    """Enum for different types of configuration settings."""
+
     ENDORSER_AUTO_ACCEPT_CONNECTIONS = "ENDORSER_AUTO_ACCEPT_CONNECTIONS"
     ENDORSER_AUTO_ACCEPT_AUTHORS = "ENDORSER_AUTO_ACCEPT_AUTHORS"
     ENDORSER_AUTO_ENDORSE_REQUESTS = "ENDORSER_AUTO_ENDORSE_REQUESTS"
@@ -18,18 +30,23 @@ class ConfigurationType(str, Enum):
 
 
 class ConfigurationSource(str, Enum):
+    """Enum for different configuration sources."""
+
     Database = "Database"
     Environment = "Environment"
     Wallet = "Wallet"
 
 
 class Configuration(BaseModel):
+    """Model for storing configuration settings."""
+
     config_id: str | None = None
     config_name: ConfigurationType
     config_value: str
     config_source: ConfigurationSource
 
     def json(self) -> dict:
+        """Converts the configuration to a JSON-compatible dictionary."""
         return {
             "config_name": self.config_name.name,
             "config_value": self.config_value,

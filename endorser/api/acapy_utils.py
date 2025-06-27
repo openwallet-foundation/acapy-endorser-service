@@ -1,3 +1,22 @@
+"""This module provides async utility functions for interacting with the Aca-Py Admin API.
+
+Functions:
+- get_acapy_headers: Generates HTTP headers required for Aca-Py admin
+                     API calls, including authentication tokens.
+- acapy_admin_request: Makes a generic API request to the Aca-Py admin endpoint,
+                       handling different HTTP methods and processing responses.
+- acapy_GET: Performs a GET request on an Aca-Py tenant endpoint.
+- acapy_POST: Performs a POST request on an Aca-Py tenant endpoint.
+- acapy_PATCH: Performs a PATCH request on an Aca-Py tenant endpoint.
+- acapy_PUT: Performs a PUT request on an Aca-Py tenant endpoint.
+- acapy_DELETE: Performs a DELETE request on an Aca-Py tenant endpoint.
+
+Usage: These functions simplify making authenticated requests to the
+Aca-Py admin API, allowing easy manipulation of tenant resources in a
+synchronous manner.
+
+"""
+
 from aiohttp import (
     ClientSession,
     ClientResponse,
@@ -26,8 +45,7 @@ def get_acapy_headers(headers=None, tenant=False) -> dict:
 async def acapy_admin_request(
     method, path, data=None, text=False, params=None, headers=None, tenant=False
 ) -> ClientResponse:
-    """
-    Generic routine to call an Aca-Py admin api.
+    """Generic routine to call an Aca-Py admin api.
 
     Default headers are used if not supplied, and security headers are injected.
 
@@ -73,9 +91,7 @@ async def acapy_admin_request(
 
 
 async def acapy_GET(path, text=False, params=None, headers=None) -> ClientResponse:
-    """
-    Call an Aca-Py tenant endpoint using GET method.
-    """
+    """Call an Aca-Py tenant endpoint using GET method."""
 
     response = await acapy_admin_request(
         "GET", path, data=None, text=text, params=params, headers=headers, tenant=True
@@ -86,9 +102,7 @@ async def acapy_GET(path, text=False, params=None, headers=None) -> ClientRespon
 async def acapy_POST(
     path, data=None, text=False, params=None, headers=None
 ) -> ClientResponse:
-    """
-    Call an Aca-Py tenant endpoint using POST method.
-    """
+    """Call an Aca-Py tenant endpoint using POST method."""
 
     response = await acapy_admin_request(
         "POST", path, data=data, text=text, params=params, headers=headers, tenant=True
@@ -97,9 +111,7 @@ async def acapy_POST(
 
 
 async def acapy_PATCH(path, text=False, params=None, headers=None) -> ClientResponse:
-    """
-    Call an Aca-Py tenant endpoint using PATCH method.
-    """
+    """Call an Aca-Py tenant endpoint using PATCH method."""
 
     response = await acapy_admin_request(
         "PATCH", path, data=None, text=text, params=params, headers=headers, tenant=True
@@ -110,9 +122,7 @@ async def acapy_PATCH(path, text=False, params=None, headers=None) -> ClientResp
 async def acapy_PUT(
     path, data=None, text=False, params=None, headers=None
 ) -> ClientResponse:
-    """
-    Call an Aca-Py tenant endpoint using PUT method.
-    """
+    """Call an Aca-Py tenant endpoint using PUT method."""
 
     response = await acapy_admin_request(
         "PUT", path, data=data, text=text, params=params, headers=headers, tenant=True
@@ -121,9 +131,7 @@ async def acapy_PUT(
 
 
 async def acapy_DELETE(path, text=False, headers=None) -> ClientResponse:
-    """
-    Call an Aca-Py tenant endpoint using DELETE method.
-    """
+    """Call an Aca-Py tenant endpoint using DELETE method."""
 
     response = await acapy_admin_request(
         "DELETE", path, data=None, text=text, params=None, headers=headers, tenant=True

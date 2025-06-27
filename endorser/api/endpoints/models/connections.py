@@ -1,3 +1,10 @@
+"""This module defines connection-related models and utility functions.
+
+Includes models for connections, enums for various connection states, roles,
+and status types, and functions to convert between webhook payloads,
+Connection objects, and database models. Additionally, it logs the conversion process.
+"""
+
 import logging
 from enum import Enum
 from uuid import UUID
@@ -9,11 +16,15 @@ logger = logging.getLogger(__name__)
 
 
 class ConnectionProtocolType(str, Enum):
+    """Enumeration for connection protocol types."""
+
     Connections = "connections/1.0"
     DIDExchange = "didexchange/1.0"
 
 
 class ConnectionStateType(str, Enum):
+    """Enumeration for connection state types."""
+
     start = "start"
     init = "init"
     invitation = "invitation"
@@ -26,6 +37,8 @@ class ConnectionStateType(str, Enum):
 
 
 class ConnectionRoleType(str, Enum):
+    """Enumeration for connection role types."""
+
     inviter = "inviter"
     invitee = "invitee"
     requester = "requester"
@@ -33,17 +46,23 @@ class ConnectionRoleType(str, Enum):
 
 
 class AuthorStatusType(str, Enum):
+    """Enumeration for author status types."""
+
     active = "Active"
     suspended = "Suspended"
 
 
 class EndorseStatusType(str, Enum):
+    """Enumeration for endorsement status types."""
+
     auto_endorse = "AutoEndorse"
     manual_endorse = "ManualEndorse"
     auto_reject = "AutoReject"
 
 
 class Connection(BaseModel):
+    """Model for representing a connection."""
+
     connection_id: UUID
     alias: str | None = None
     author_status: AuthorStatusType
@@ -63,6 +82,8 @@ class Connection(BaseModel):
 
 
 class ConnectionList(BaseModel):
+    """Model for representing a paginated list of connections."""
+
     page_size: int
     page_num: int
     count: int

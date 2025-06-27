@@ -1,3 +1,25 @@
+"""This module provides functions for managing endorsement transactions with a database.
+
+It includes operations for fetching, updating, storing, and endorsing transactions,
+and interacts with the ACA-Py system for endorsement requests and status.
+
+Functions:
+- get_endorser_did: Retrieve the public DID of the endorser.
+- db_add_db_txn_record: Add a new endorsement transaction record to the database.
+- db_fetch_db_txn_record: Fetch an endorsement transaction record by its transaction ID.
+- db_update_db_txn_record: Update a specific endorsement transaction record
+                           in the database.
+- db_get_txn_records: Retrieve a paginated list of endorsement transaction
+                      records with optional filters.
+- get_transactions_list: Get a formatted list of endorsement transactions for response.
+- get_transaction_object: Fetch a specific endorsement transaction object for response.
+- store_endorser_request: Store a new endorsement transaction request in the database.
+- endorse_transaction: Endorse a transaction and update its status in the database.
+- reject_transaction: Reject a transaction and update its status in the database.
+- update_endorsement_status: Update the status of an endorsement transaction
+                             in the database.
+"""
+
 import logging
 from typing import cast
 from uuid import UUID
@@ -19,12 +41,14 @@ logger = logging.getLogger(__name__)
 
 
 async def get_endorser_did() -> str:
+    """Get the public DID from the endorser wallet."""
     diddoc = cast(dict, await au.acapy_GET("wallet/did/public"))
     did = cast(str, diddoc["result"]["did"])
     return did
 
 
 async def db_add_db_txn_record(db: AsyncSession, db_txn: EndorseRequest):
+    """Add a new transaction record to the database."""
     db.add(db_txn)
     await db.commit()
 
@@ -32,6 +56,7 @@ async def db_add_db_txn_record(db: AsyncSession, db_txn: EndorseRequest):
 async def db_fetch_db_txn_record(
     db: AsyncSession, transaction_id: UUID
 ) -> EndorseRequest:
+    """Fetch a single transaction record from the database by ID."""
     logger.info(f">>> db_fetch_db_txn_record() for {transaction_id}")
     q = select(EndorseRequest).where(EndorseRequest.transaction_id == transaction_id)
     result = await db.execute(q)
@@ -46,6 +71,7 @@ async def db_fetch_db_txn_record(
 async def db_update_db_txn_record(
     db: AsyncSession, db_txn: EndorseRequest
 ) -> EndorseRequest:
+    """Update an existing transaction record in the database."""
     payload_dict = db_txn.dict()
     q = (
         update(EndorseRequest)
@@ -65,6 +91,7 @@ async def db_get_txn_records(
     page_size: int = 10,
     page_num: int = 1,
 ) -> tuple[int, list[EndorseRequest]]:
+    """Get a paginated list of transaction records filtered by state and connection ID."""
     limit = page_size
     skip = (page_num - 1) * limit
     filters = []
@@ -99,6 +126,7 @@ async def get_transactions_list(
     page_size: int = 10,
     page_num: int = 1,
 ) -> tuple[int, list[EndorseTransaction]]:
+    """Get a paginated list of transactions with optional filtering."""
     (count, db_txns) = await db_get_txn_records(
         db,
         state=transaction_state,
@@ -117,6 +145,7 @@ async def get_transaction_object(
     db: AsyncSession,
     transaction_id: UUID,
 ) -> EndorseTransaction:
+    """Get a single transaction by ID."""
     logger.info(f">>> get_transaction_object() for {transaction_id}")
     db_txn: EndorseRequest = await db_fetch_db_txn_record(db, transaction_id)
     item = db_to_txn_object(db_txn, acapy_txn=None)
@@ -124,6 +153,7 @@ async def get_transaction_object(
 
 
 async def store_endorser_request(db: AsyncSession, txn: EndorseTransaction):
+    """Store a new endorser request in the database."""
     logger.info(f">>> called store_endorser_request with: {txn.transaction_id}")
 
     db_txn: EndorseRequest = txn_to_db_object(txn)
@@ -134,6 +164,7 @@ async def store_endorser_request(db: AsyncSession, txn: EndorseTransaction):
 
 
 async def endorse_transaction(db: AsyncSession, txn: EndorseTransaction):
+    """Endorse a transaction and update its status."""
     logger.info(f">>> called endorse_transaction with: {txn.transaction_id}")
 
     # fetch existing db object
@@ -153,6 +184,7 @@ async def endorse_transaction(db: AsyncSession, txn: EndorseTransaction):
 
 
 async def reject_transaction(db: AsyncSession, txn: EndorseTransaction):
+    """Reject a transaction and update its status."""
     logger.info(f">>> called reject_transaction with: {txn.transaction_id}")
 
     # fetch existing db object
@@ -172,6 +204,7 @@ async def reject_transaction(db: AsyncSession, txn: EndorseTransaction):
 
 
 async def update_endorsement_status(db: AsyncSession, txn: EndorseTransaction):
+    """Update the status of an endorsement transaction."""
     logger.info(f">>> called update_endorsement_status with: {txn.transaction_id}")
 
     # fetch existing db object

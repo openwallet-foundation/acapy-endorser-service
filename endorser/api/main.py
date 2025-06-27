@@ -1,3 +1,11 @@
+"""Main module for initializing and running the Aries Endorser Service.
+
+This module sets up a FastAPI server to host the Endorser service. It configures
+logging, sets environment variables, and mounts the main application along with
+webhook and endorser routes. The application responds to startup and shutdown events
+to register necessary events and manage lifecycle operations.
+"""
+
 import logging
 import os
 import time
@@ -27,6 +35,8 @@ time.tzset()
 
 
 def get_application() -> FastAPI:
+    """Create and return a FastAPI application instance."""
+
     application = FastAPI(
         title=settings.TITLE,
         description=settings.DESCRIPTION,
@@ -59,6 +69,11 @@ def on_endorser_shutdown():
 
 @app.get("/", tags=["liveness"])
 def main():
+    """Main function that returns the status and health information.
+
+    Returns:
+        dict: A dictionary containing the status and health keys with "ok" values.
+    """
     return {"status": "ok", "health": "ok"}
 
 
