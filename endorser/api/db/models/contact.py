@@ -1,6 +1,8 @@
 """Contact Database Tables/Models.
+
 Models of the Endorser tables for Contacts (Authors) and related data.
 """
+
 import uuid
 from datetime import datetime
 from typing import List
@@ -13,8 +15,8 @@ from api.db.models.base import BaseModel
 
 
 class Contact(BaseModel, table=True):
-    """Contact.
-    This is the model for the Contact table (postgresql specific dialects in use).
+    """Contact is the model for the Contact table (postgresql specific dialects in use).
+
     Attributes:
       contact_id: Endorser's Contact ID
       author_status: Whether they are an approved author or not
@@ -25,7 +27,7 @@ class Contact(BaseModel, table=True):
       public_did: Represents the Contact's agent's Public DID (if any)
       state: The underlying AcaPy connection state
       created_at: Timestamp when record was created
-      updated_at: Timestamp when record was last modified
+      updated_at: Timestamp when record was last modified.
     """
 
     contact_id: uuid.UUID = Field(

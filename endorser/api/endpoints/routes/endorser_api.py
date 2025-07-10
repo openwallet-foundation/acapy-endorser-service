@@ -1,3 +1,5 @@
+"""This module sets up the main API routing for the Aries Endorser Service."""
+
 from fastapi import APIRouter
 
 from api.endpoints.routes import connections, endorse, reports, endorser_admin, allow

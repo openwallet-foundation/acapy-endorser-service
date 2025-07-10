@@ -1,3 +1,16 @@
+"""Module for handling Aca-Py WebHook endpoints in the Endorser Agent.
+
+This module defines a FastAPI application and router to process
+incoming webhook events from an Aries Cloudagent (Aca-Py). It provides
+endpoints for validating and processing webhook data based on various
+topics and state changes, and includes dependency injection for
+authentication and database session management. Handlers for different
+webhook topics and states are dynamically invoked from the
+api_services module, and auto-steppers may be used to progress to
+subsequent states.
+
+"""
+
 import logging
 import traceback
 from enum import Enum
@@ -23,6 +36,8 @@ api_key_header = APIKeyHeader(
 
 
 class WebhookTopicType(str, Enum):
+    """Enumeration of various webhook topic types for handling different events."""
+
     ping = "ping"
     connections = "connections"
     oob_invitation = "oob-invitation"
@@ -45,6 +60,7 @@ class WebhookTopicType(str, Enum):
 async def get_api_key(
     api_key_header: str = Security(api_key_header),
 ):
+    """Get API key from header and validate against settings."""
     if api_key_header == settings.ACAPY_WEBHOOK_URL_API_KEY:
         return api_key_header
     else:
@@ -54,6 +70,15 @@ async def get_api_key(
 
 
 def get_webhookapp() -> FastAPI:
+    """Create and return a FastAPI application for handling webhooks.
+
+    The application is configured with the specified title, description, debug
+    settings, and middleware. It includes a router for managing webhook-related
+    endpoints.
+
+    Returns:
+        FastAPI: A configured FastAPI application instance.
+    """
     application = FastAPI(
         title="WebHooks",
         description="Endpoints for Aca-Py WebHooks",

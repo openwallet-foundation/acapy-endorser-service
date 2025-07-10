@@ -1,3 +1,6 @@
+"""Database-related exception classes for the endorser API."""
+
+
 class DoesNotExist(Exception):
     """Raised when entity was not found in database."""
 

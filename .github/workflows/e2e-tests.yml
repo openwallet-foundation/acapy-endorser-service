@@ -1,0 +1,35 @@
+name: End-to-End Tests
+
+on:
+  pull_request:
+    branches: [main]
+
+env:
+  ENDORSER_ENV: "testing"
+  ACAPY_ENDPOINT: "http://host.docker.internal:8050"
+  LEDGER_URL: "http://test.bcovrin.vonx.io"
+  TAILS_SERVER_URL: "https://tails-test.vonx.io"
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build Docker images
+        working-directory: ./docker
+        run: |
+          ./manage build
+
+      - name: Start services
+        working-directory: ./docker
+        run: |
+          ./manage start-bdd --logs &
+          # Wait for services to be ready (adjust sleep time as needed)
+          sleep 30
+
+      - name: Run BDD tests
+        working-directory: ./docker
+        run: |
+          ./manage run-bdd-docker

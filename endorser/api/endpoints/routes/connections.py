@@ -1,3 +1,5 @@
+"""API endpoints for managing connections in the Aries Endorser Service."""
+
 import logging
 from typing import Optional
 from uuid import UUID
@@ -34,6 +36,20 @@ async def get_connections(
     page_num: int = 1,
     db: AsyncSession = Depends(get_db),
 ) -> ConnectionList:
+    """Retrieve a paginated list of connections based on state.
+
+    Args:
+        connection_state ConnectionStateType: Desired state to filter connections.
+        page_size int: Number of connections per page.
+        page_num int: Desired page number.
+        db AsyncSession: Database session.
+
+    Returns:
+        ConnectionList: An object containing a list of connections and pagination details.
+
+    Raises:
+        HTTPException: If there is an error retrieving connections.
+    """
     try:
         (total_count, connections) = await get_connections_list(
             db,
@@ -58,6 +74,18 @@ async def get_connection(
     connection_id: UUID,
     db: AsyncSession = Depends(get_db),
 ) -> Connection:
+    """Retrieve a connection by its ID.
+
+    Parameters:
+    - connection_id: Unique identifier for the connection.
+    - db: Database session dependency.
+
+    Returns:
+    - A Connection object.
+
+    Raises:
+    - HTTPException: If there is a server error.
+    """
     try:
         connection = await get_connection_object(db, connection_id)
         return connection
@@ -72,6 +100,22 @@ async def update_connection(
     public_did: str | None = None,
     db: AsyncSession = Depends(get_db),
 ) -> Connection:
+    """Update a connection's information based on the connection_id.
+
+    Args:
+        connection_id (UUID): Unique identifier for the connection.
+        alias (str): New alias for the connection.
+        public_did (str | None, optional): Optional public DID associated
+                                          with the connection.
+        db (AsyncSession, optional): The database session. Defaults to
+                                     dependency injection with get_db.
+
+    Returns:
+        Connection: The updated connection object.
+
+    Raises:
+        HTTPException: If there is an error updating the connection.
+    """
     try:
         connection = await update_connection_info(db, connection_id, alias, public_did)
         return connection
@@ -86,6 +130,20 @@ async def configure_connection(
     endorse_status: EndorseStatusType,
     db: AsyncSession = Depends(get_db),
 ) -> Connection:
+    """Configure the connection with author and endorse statuses.
+
+    Args:
+        connection_id (UUID): Unique identifier for the connection.
+        author_status (AuthorStatusType): The status of the author.
+        endorse_status (EndorseStatusType): The endorsement status.
+        db (AsyncSession, optional): The database session.
+
+    Returns:
+        Connection: The updated connection configuration.
+
+    Raises:
+        HTTPException: If an error occurs during the configuration update.
+    """
     try:
         connection = await update_connection_config(
             db, connection_id, author_status, endorse_status
@@ -114,5 +172,18 @@ async def reject_connection(
     connection_id: str,
     db: AsyncSession = Depends(get_db),
 ) -> Connection:
+    """Reject a connection request.
+
+    This endpoint will be used to reject a connection by its ID.
+    Currently raises a NotImplementedError as the ProblemReport
+    response is not yet implemented.
+
+    Parameters:
+    - connection_id: str - The ID of the connection to be rejected.
+    - db: AsyncSession - Database session dependency.
+
+    Returns:
+    - Connection: The rejected connection data.
+    """
     # TODO this should send a ProblemReport back to the requester
     raise NotImplementedError

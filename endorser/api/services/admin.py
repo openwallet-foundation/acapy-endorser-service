@@ -1,3 +1,5 @@
+"""Endorser configuration management module for Aries Endorser Service."""
+
 import logging
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -23,6 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 async def get_endorser_configs(db: AsyncSession) -> dict:
+    """Retrieve Endorser configurations from the database and ACA-Py."""
     acapy_config = await au.acapy_GET(
         "status/config",
     )
@@ -41,6 +44,7 @@ async def get_endorser_configs(db: AsyncSession) -> dict:
 
 
 async def get_endorser_config(db: AsyncSession, config_name: str) -> Configuration:
+    """Fetch the endorser configuration record by config name."""
     return await get_config_record(db, config_name)
 
 
@@ -48,7 +52,7 @@ def validate_endorser_config(
     config_name: str,
     config_value: str,
 ):
-    # TODO document that we can globally endorse types of transactions in the README
+    """Process and validate the endorser configuration using the given name and value."""
     if config_name == ConfigurationType.ENDORSER_AUTO_ENDORSE_TXN_TYPES.value:
         config_vals = config_value.split(",")
         txn_type_vals = [e.value for e in EndorseTransactionType]
@@ -56,16 +60,16 @@ def validate_endorser_config(
             if config_val not in txn_type_vals:
                 raise Exception(f"Error {config_val} is not a valid transaction type")
     elif config_name == ConfigurationType.ENDORSER_AUTO_ACCEPT_CONNECTIONS.value:
-        # TODO
+        # TODO: Implement functionality for auto-accepting connections
         pass
     elif config_name == ConfigurationType.ENDORSER_AUTO_ACCEPT_AUTHORS.value:
-        # TODO
+        # TODO: Implement functionality for auto-accepting authors
         pass
     elif config_name == ConfigurationType.ENDORSER_AUTO_ENDORSE_REQUESTS.value:
-        # TODO
+        # TODO: Implement functionality for auto-endorsing requests
         pass
     elif config_name == ConfigurationType.ENDORSER_REJECT_BY_DEFAULT.value:
-        # TODO
+        # TODO: Implement functionality for rejecting by default
         pass
 
 
@@ -74,4 +78,5 @@ async def update_endorser_config(
     config_name: str,
     config_value: str,
 ) -> Configuration:
+    """Update endorser configuration record asynchronously."""
     return await update_config_record(db, config_name, config_value)

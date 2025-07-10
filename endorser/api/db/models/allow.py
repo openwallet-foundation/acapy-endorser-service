@@ -16,7 +16,7 @@ from api.db.models.base import BaseModel
 
 
 class AllowedPublicDid(BaseModel, table=True):
-    """AllowedPublicDid
+    """AllowedPublicDid.
 
     This is the model for the AllowPublicDid table
     (postgresql specific dialects in use).
@@ -44,6 +44,19 @@ class AllowedPublicDid(BaseModel, table=True):
 
 
 def allowed_schema_uuid(context: DefaultExecutionContext):
+    """Generate a UUID for a schema using author DID, schema name, and version.
+
+    This function retrieves the current parameters from the provided context,
+    concatenates the 'author_did', 'schema_name', and 'version' fields, and
+    generates a UUID using the uuid5 algorithm with the NAMESPACE_OID namespace.
+
+    Args:
+        context (DefaultExecutionContext): The execution context that provides
+                                           the current parameters.
+
+    Returns:
+        uuid.UUID: The generated UUID based on the schema's unique attributes.
+    """
     pr = context.get_current_parameters()
     return uuid.uuid5(
         uuid.NAMESPACE_OID,
@@ -52,7 +65,7 @@ def allowed_schema_uuid(context: DefaultExecutionContext):
 
 
 class AllowedSchema(BaseModel, table=True):
-    """AllowedSchema
+    """AllowedSchema.
 
     This is the model for the AllowSchema table
     (postgresql specific dialects in use).
@@ -92,6 +105,23 @@ class AllowedSchema(BaseModel, table=True):
 
 
 def allowed_cred_def_uuid(context: DefaultExecutionContext):
+    """Generate a UUID for allowed credential definition using provided context.
+
+    Retrieves current parameters from the context, and constructs a
+    UUID based on the schema issuer DID, credential definition author
+    DID, schema name, version, and tag. The revocation registry
+    definition and entry are not included in the UUID as they describe
+    the capabilities of the credential definition itself, not the
+    credential definition.
+
+    Args:
+        context (DefaultExecutionContext): The execution context
+                                           containing the current parameters.
+
+    Returns:
+        uuid.UUID: The generated UUID for the credential definition.
+
+    """
     pr = context.get_current_parameters()
     return uuid.uuid5(
         uuid.NAMESPACE_OID,
@@ -99,16 +129,12 @@ def allowed_cred_def_uuid(context: DefaultExecutionContext):
         + pr["creddef_author_did"]
         + pr["schema_name"]
         + pr["version"]
-        + pr["tag"]
-        # We don't include rev_reg_def or rev_reg_entry since they
-        # describe what a credential definition supports not the
-        # credential-definition its self
-        ,
+        + pr["tag"],
     )
 
 
 class AllowedCredentialDefinition(BaseModel, table=True):
-    """AllowedCredentialDefinition
+    """AllowedCredentialDefinition.
 
     This is the model for the AllowCredentialDefinition table
     (postgresql specific dialects in use).
