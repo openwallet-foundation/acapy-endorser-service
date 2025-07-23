@@ -73,6 +73,12 @@ By default, the `./manage` script will use a random seed to generate the Endorse
 ENDORSER_SEED=<your 32 char seed> ./manage start --logs
 ```
 
+To define a WebVH server to use, set the `WEBVH_SERVER_URL` variable.
+
+```bash
+WEBVH_SERVER_URL=https://id.test-suite.app
+```
+
 ## Exposing the Endorser Agent using Ngrok
 
 By default, the `./manage` script will start an ngrok process to expose the Endorser agent's endpoint, and the Endorser agent will use the ngrok URL when publishing their endpoint.

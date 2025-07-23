@@ -64,10 +64,16 @@ services:
       - ENDORSER_SEED=${ENDORSER_SEED}
       - LOG_LEVEL=${LOG_LEVEL}
       - ACAPY_REQUESTS_THROUGH_PUBLIC_DID=true
+      - ACAPY_PLUGIN=webvh
+      - ACAPY_PLUGIN_CONFIG=/home/aries/webvh-plugin.yml
+      - WEBVH_SERVER_URL=${WEBVH_SERVER_URL}
     ports:
       - ${ACAPY_ADMIN_PORT_EXPOSED}:${ACAPY_ADMIN_PORT}
       - ${ACAPY_HTTP_PORT_EXPOSED}:${ACAPY_HTTP_PORT}
       - ${ACAPY_WS_PORT_EXPOSED}:${ACAPY_WS_PORT}
+    configs:
+      - source: webvh-plugin.yml
+        target: /home/aries/webvh-plugin.yml
     entrypoint: /bin/bash
     command: [
         "-c",
@@ -281,3 +287,11 @@ volumes:
   endorser-wallet:
   endorser-controller:
   author-wallet:
+
+configs:
+  webvh-plugin.yml:
+    content: |
+      plugin:
+        - webvh
+      plugin-config-value:
+        - did-webvh.server_url=${WEBVH_SERVER_URL}
