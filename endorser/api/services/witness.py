@@ -128,12 +128,20 @@ async def reject_request(db: AsyncSession, request: WitnessRequest):
     )
 
     # reject request and tell aca-py
-    response = cast(
-        dict,
-        await au.acapy_DELETE(
-            f"did/webvh/witness/{request.record_type}?scid={request.scid}"
-        ),
-    )
+    if request.record_type == "log-entry":
+        response = cast(
+            dict,
+            await au.acapy_DELETE(
+                f"did/webvh/witness/log-entries?scid={request.scid}"
+            ),
+        )
+    elif request.record_type == "attested-resource":
+        response = cast(
+            dict,
+            await au.acapy_DELETE(
+                f"did/webvh/witness/attested-resources?scid={request.scid}"
+            ),
+        )
 
     # update local db state
     db_record.state = "rejected"

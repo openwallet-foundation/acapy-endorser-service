@@ -227,7 +227,7 @@ class AllowedLogEntry(BaseModel, table=True):
     domain: str = Field(nullable=False, default=None)
     namespace: str = Field(nullable=False, default=None)
     identifier: str = Field(nullable=False, default=None)
-    version: str = Field(nullable=True, default="1.0")
+    version: str = Field(nullable=True, default=None)
 
     details: str = Field(nullable=True, default=None)
     # --- acapy data
