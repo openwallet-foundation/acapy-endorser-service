@@ -3,16 +3,14 @@
 import logging
 from typing import cast
 
-from sqlalchemy import desc, select, update
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.sql.functions import func
 
 import api.acapy_utils as au
 from api.db.errors import DoesNotExist
 from api.db.models.witness_request import WitnessRequestDbRecord
 from api.endpoints.models.witness import (
     WitnessRequest,
-    db_to_request_object,
     request_to_db_object,
 )
 
@@ -98,12 +96,12 @@ async def witness_request(db: AsyncSession, request: WitnessRequest):
 
     # witness request and tell aca-py
     if request.record_type == "log-entry":
-        response = cast(
+        cast(
             dict,
             await au.acapy_POST(f"did/webvh/witness/log-entries?scid={request.scid}"),
         )
     elif request.record_type == "attested-resource":
-        response = cast(
+        cast(
             dict,
             await au.acapy_POST(
                 f"did/webvh/witness/attested-resources?scid={request.scid}"
@@ -129,14 +127,12 @@ async def reject_request(db: AsyncSession, request: WitnessRequest):
 
     # reject request and tell aca-py
     if request.record_type == "log-entry":
-        response = cast(
+        cast(
             dict,
-            await au.acapy_DELETE(
-                f"did/webvh/witness/log-entries?scid={request.scid}"
-            ),
+            await au.acapy_DELETE(f"did/webvh/witness/log-entries?scid={request.scid}"),
         )
     elif request.record_type == "attested-resource":
-        response = cast(
+        cast(
             dict,
             await au.acapy_DELETE(
                 f"did/webvh/witness/attested-resources?scid={request.scid}"

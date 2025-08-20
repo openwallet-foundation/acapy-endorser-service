@@ -2,11 +2,10 @@
 
 import uuid
 from datetime import datetime
-from typing import List, Optional
 
 from sqlmodel import Field
-from sqlalchemy import Column, func, text, String
-from sqlalchemy.dialects.postgresql import UUID, TIMESTAMP, ARRAY
+from sqlalchemy import Column, func, text
+from sqlalchemy.dialects.postgresql import UUID, TIMESTAMP
 
 from api.db.models.base import BaseModel
 

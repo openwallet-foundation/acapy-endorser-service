@@ -32,7 +32,6 @@ from api.services.endorse import (
 )
 from api.services.witness import (
     store_witness_request,
-    update_witnessing_status,
 )
 
 logger = logging.getLogger(__name__)
