@@ -25,6 +25,7 @@ from api.core.config import settings
 from api.endpoints.dependencies.db import get_db
 from api.endpoints.models.connections import Connection
 from api.endpoints.models.endorse import EndorseTransaction
+# from api.endpoints.models.witness import WitnessRequest
 
 logger = logging.getLogger(__name__)
 
@@ -55,6 +56,8 @@ class WebhookTopicType(str, Enum):
     revocation_registry = "revocation-registry"
     revocation_notification = "revocation-notification"
     problem_report = "problem-report"
+    log_entry = "log-entry"
+    attested_resource = "attested-resource"
 
 
 async def get_api_key(
@@ -133,5 +136,5 @@ async def process_webhook(
     except Exception as e:
         logger.error(">>> auto-stepper returned error:" + str(e))
         traceback.print_exc()
-
-    return result
+        
+    return result if isinstance(result, dict) else result.model_dump()

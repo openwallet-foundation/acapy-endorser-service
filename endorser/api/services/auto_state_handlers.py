@@ -24,6 +24,7 @@ import api.acapy_utils as au
 from api.db.models.allow import (
     AllowedCredentialDefinition,
     AllowedSchema,
+    AllowedLogEntry,
 )
 from api.endpoints.models.allow import (
     AllowedPublicDid,
@@ -39,6 +40,9 @@ from api.endpoints.models.endorse import (
     EndorseTransactionType,
     webhook_to_txn_object,
 )
+from api.endpoints.models.witness import (
+    WitnessRequest
+)
 from api.services.configurations import (
     get_bool_config,
     get_config,
@@ -51,6 +55,10 @@ from api.services.endorse import (
     endorse_transaction,
     get_endorser_did,
     reject_transaction,
+)
+from api.services.witness import (
+    witness_request,
+    reject_request,
 )
 
 logger = logging.getLogger(__name__)
@@ -161,6 +169,16 @@ class SchemaCriteria:
     Version: str
 
 
+@dataclass
+class LogEntryCriteria:
+    """Criteria for identifying log entries."""
+
+    scid: str
+    domain: str
+    namespace: str
+    identifier: str
+
+
 def eq_or_wild(indb, clause: str | Any):
     """Evaluate equality with wildcard support."""
     if isinstance(clause, str):
@@ -190,6 +208,20 @@ async def allowed_publish_did(db: AsyncSession, did: str) -> bool:
     """Check if publishing a DID is allowed."""
     return await check_auto_endorse(
         db, AllowedPublicDid, [(AllowedPublicDid.registered_did, did)]
+    )
+
+
+async def allowed_log_entry(db: AsyncSession, log_entry: LogEntryCriteria) -> bool:
+    """Check if creating a schema is allowed."""
+    return await check_auto_endorse(
+        db,
+        AllowedLogEntry,
+        [
+            (AllowedLogEntry.scid, log_entry.scid),
+            (AllowedLogEntry.domain, log_entry.domain),
+            (AllowedLogEntry.namespace, log_entry.namespace),
+            (AllowedLogEntry.identifier, log_entry.identifier),
+        ],
     )
 
 
@@ -426,3 +458,84 @@ async def auto_step_endorse_transaction_transaction_acked(
     """Handle transaction acknowledgement events."""
     logger.info(">>> in auto_step_endorse_transaction_transaction_acked() ...")
     return {}
+
+async def can_witness(
+    db: AsyncSession, request: WitnessRequest
+) -> bool:
+    """Determine if a request can be witnessed based on its type and attributes."""
+    logger.debug(">>> from can_witness: entered")
+
+    # Witnessing a log entry
+    if request.record_type == 'log-entry':
+        did = request.record.get('state', {}).get('id', None)
+        did_parts = did.split(':')
+        return await allowed_log_entry(
+            db,
+            LogEntryCriteria(
+                scid=did_parts[2],
+                domain=did_parts[3],
+                namespace=did_parts[4],
+                identifier=did_parts[5],
+            ),
+        )
+        
+    # Witnessing an attested resource
+    elif request.record_type == 'attested-resource':
+        content = request.record.get('content', {})
+        resource_type = request.record.get('metadata', {}).get('resourceType', None)
+        if resource_type == 'anoncredsSchema':
+            return await allowed_schema(
+                db, SchemaCriteria(
+                    content["issuerId"], content["name"], content["version"]
+                )
+            )
+        elif resource_type == 'anoncredsCredDef':
+            return await allowed_creddef(
+                db,
+                CreddefCriteria(
+                    DID=content["issuerId"],
+                    # Schema_Issuer_DID=schema_id[0],
+                    # Schema_Name=schema_id[2],
+                    # Schema_Version=schema_id[3],
+                    Tag=content['tag'],
+                ),
+            )
+        elif resource_type == 'anoncredsRevRegDef':
+            pass
+        elif resource_type == 'anoncredsRevRegEntry':
+            pass
+
+        return False
+
+    return False
+
+async def auto_step_log_entry_pending(
+    db: AsyncSession, payload: dict, handler_result: WitnessRequest | dict
+) -> WitnessRequest | dict:
+    """Handle incoming endorsement transaction requests with automatic processing."""
+    logger.info(">>> in auto_step_log_entry_pending() ...")
+    try:
+        if await get_bool_config(db, "ENDORSER_AUTO_ENDORSE_REQUESTS"):
+            logger.debug(
+                ">>> from auto_step_log_entry_pending:\
+                this was allowed"
+            )
+            handler_result = await witness_request(db, handler_result)
+        elif await can_witness(db, handler_result):
+            logger.debug(
+                f">>> from auto_step_log_entry_pending:\
+                {handler_result} was allowed"
+            )
+            handler_result = await witness_request(db, handler_result)
+        # If we could not auto endorse check if we should reject it or leave it pending
+        elif await get_bool_config(db, "ENDORSER_REJECT_BY_DEFAULT"):
+            handler_result = await reject_request(db, handler_result)
+        else:
+            handler_result = {}
+    except Exception as e:
+        logger.error(traceback.format_exc())
+        logger.error(
+            f">>> in handle_endorse_transaction_request_received:\
+            Failed to determine if the transaction should be endorsed with error: {e}"
+        )
+    return handler_result

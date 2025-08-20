@@ -31,6 +31,7 @@ from api.db.errors import AlreadyExists
 from api.db.models.allow import (
     AllowedCredentialDefinition,
     AllowedSchema,
+    AllowedLogEntry,
 )
 from api.db.models.base import BaseModel
 from api.endpoints.dependencies.db import get_db
@@ -39,6 +40,7 @@ from api.endpoints.models.allow import (
     AllowedPublicDid,
     AllowedPublicDidList,
     AllowedSchemaList,
+    AllowedLogEntryList
 )
 from api.services.allow_lists import add_to_allow_list, updated_allowed
 
@@ -481,5 +483,97 @@ async def append_config(
         return await update_full_config(
             publish_did, schema, credential_definition, db, False
         )
+    except Exception as e:
+        raise HTTPException(status_code=db_to_http_exception(e), detail=str(e))
+
+
+
+@router.get(
+    "/log-entry",
+    status_code=status.HTTP_200_OK,
+    response_model=AllowedLogEntryList,
+    description="Get a list of log entries that will be auto endorsed\
+    when sent to the ledger by an author",
+)
+async def get_allowed_log_entries(
+    scid: Optional[str] = None,
+    domain: Optional[str] = None,
+    namespace: Optional[str] = None,
+    identifier: Optional[str] = None,
+    page_size: int = 10,
+    page_num: int = 1,
+    db: AsyncSession = Depends(get_db),
+) -> AllowedLogEntryList:
+    """Fetch allowed log entries with pagination."""
+    try:
+        filter = {
+            scid: AllowedLogEntry.scid,
+            domain: AllowedLogEntry.domain,
+            namespace: AllowedLogEntry.namespace,
+            identifier: AllowedLogEntry.identifier,
+        }
+
+        db_txn: list[AllowedLogEntry]
+        total_count, db_txn = await select_from_table(
+            db, filter, AllowedLogEntry, page_num, page_size
+        )
+        return AllowedLogEntryList(
+            page_size=page_size,
+            page_num=page_num,
+            total_count=total_count,
+            count=len(db_txn),
+            log_entries=db_txn,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=db_to_http_exception(e), detail=str(e))
+
+
+@router.post(
+    "/log-entry",
+    status_code=status.HTTP_200_OK,
+    response_model=AllowedLogEntry,
+    description="Add a new log entry that will be auto endorsed\
+    when sent to the ledger by a controller.\
+    Any field marked with a * or left empty match on any value.",
+)
+async def add_allowed_log_entry(
+    scid: str = "*",
+    domain: str = "*",
+    namespace: str = "*",
+    identifier: str = "*",
+    db: AsyncSession = Depends(get_db),
+) -> AllowedLogEntry:
+    """Add a new log entry to the allow list."""
+    try:
+        tmp = AllowedLogEntry(
+            scid=scid,
+            domain=domain,
+            namespace=namespace,
+            identifier=identifier,
+        )
+        return await add_to_allow_list(db, tmp)
+    except Exception as e:
+        raise HTTPException(status_code=db_to_http_exception(e), detail=str(e))
+
+
+@router.delete(
+    "/log-entry",
+    status_code=status.HTTP_200_OK,
+    response_model=dict,
+    description="Remove a log entry from the list of log entries that will be auto \
+    endorsed when sent to the ledger",
+)
+async def delete_allowed_log_entry(
+    allowed_log_entry_id: UUID,
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Delete a log entry from the allow list."""
+    try:
+        q = delete(AllowedLogEntry).where(
+            AllowedLogEntry.allowed_log_entry_id == allowed_log_entry_id
+        )
+        await db.execute(q)
+        await updated_allowed(db)
+        return {}
     except Exception as e:
         raise HTTPException(status_code=db_to_http_exception(e), detail=str(e))

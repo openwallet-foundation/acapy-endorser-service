@@ -20,6 +20,7 @@ from api.db.models.allow import (
     AllowedPublicDid,
     AllowedSchema,
     AllowedCredentialDefinition,
+    AllowedLogEntry,
 )
 
 
@@ -79,3 +80,21 @@ class AllowedCredentialDefinitionList(BaseModel):
     count: int
     total_count: int
     credentials: list[AllowedCredentialDefinition]
+
+
+class AllowedLogEntryList(BaseModel):
+    """Represents a paginated list of allowed log entries.
+
+    Attributes:
+        page_size (int): The number of items per page.
+        page_num (int): The current page number.
+        count (int): The number of items in the current page.
+        total_count (int): The total number of items across all pages.
+        log_entries (list[AllowedLogEntries]): The list of allowed log entries.
+    """
+
+    page_size: int
+    page_num: int
+    count: int
+    total_count: int
+    log_entries: list[AllowedLogEntry]

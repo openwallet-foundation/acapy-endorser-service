@@ -190,7 +190,7 @@ async def reject_transaction(db: AsyncSession, txn: EndorseTransaction):
     # fetch existing db object
     db_txn: EndorseRequest = await db_fetch_db_txn_record(db, txn.transaction_id)
 
-    # endorse transaction and tell aca-py
+    # reject transaction and tell aca-py
     response = cast(
         dict, await au.acapy_POST(f"transactions/{txn.transaction_id}/refuse")
     )

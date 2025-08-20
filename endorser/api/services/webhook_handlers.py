@@ -19,6 +19,10 @@ from api.endpoints.models.endorse import (
     EndorseTransaction,
     webhook_to_txn_object,
 )
+from api.endpoints.models.witness import (
+    WitnessRequest,
+    webhook_to_witness_object
+)
 from api.services.connections import (
     set_connection_author_metadata,
     store_connection_request,
@@ -28,6 +32,10 @@ from api.services.endorse import (
     get_endorser_did,
     store_endorser_request,
     update_endorsement_status,
+)
+from api.services.witness import (
+    store_witness_request,
+    update_witnessing_status,
 )
 
 logger = logging.getLogger(__name__)
@@ -106,4 +114,15 @@ async def handle_endorse_transaction_transaction_acked(db: AsyncSession, payload
     endorser_did = await get_endorser_did()
     transaction: EndorseTransaction = webhook_to_txn_object(payload, endorser_did)
     result = await update_endorsement_status(db, transaction)
+    return result
+
+
+async def handle_log_entry_pending(
+    db: AsyncSession, payload: dict
+):
+    """Update status for a refused log entry."""
+    logger.info(">>> in handle_log_entry_pending() ...")
+    witness_request: WitnessRequest = webhook_to_witness_object(payload)
+    result = await store_witness_request(db, witness_request)
+    # result = await update_witnessing_status(db, request)
     return result
