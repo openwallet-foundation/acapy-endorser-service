@@ -19,18 +19,20 @@ from api.endpoints.models.witness import (
 logger = logging.getLogger(__name__)
 
 
-
 async def db_add_db_txn_record(db: AsyncSession, db_request: WitnessRequestDbRecord):
     """Add a new transaction record to the database."""
     db.add(db_request)
     await db.commit()
+
 
 async def db_fetch_db_txn_record(
     db: AsyncSession, record_id: str
 ) -> WitnessRequestDbRecord:
     """Fetch a single transaction record from the database by ID."""
     logger.info(f">>> db_fetch_db_txn_record() for {record_id}")
-    q = select(WitnessRequestDbRecord).where(WitnessRequestDbRecord.record_id == record_id)
+    q = select(WitnessRequestDbRecord).where(
+        WitnessRequestDbRecord.record_id == record_id
+    )
     result = await db.execute(q)
     result_rec = result.scalar_one_or_none()
     if not result_rec:
@@ -54,6 +56,7 @@ async def db_update_db_txn_record(
     await db.commit()
     return await db_fetch_db_txn_record(db, db_record.record_id)
 
+
 async def store_witness_request(db: AsyncSession, request: WitnessRequest):
     """Store a new witness request in the database."""
     logger.info(f">>> called store_witness_request with: {request.record_id}")
@@ -70,12 +73,16 @@ async def update_witnessing_status(db: AsyncSession, request: WitnessRequest):
     logger.info(f">>> called update_endorsement_status with: {request.record_id}")
 
     # fetch existing db object
-    db_record: WitnessRequestDbRecord = await db_fetch_db_txn_record(db, request.record_id)
+    db_record: WitnessRequestDbRecord = await db_fetch_db_txn_record(
+        db, request.record_id
+    )
 
     # update local db state
     db_record.state = request.state
     db_record = await db_update_db_txn_record(db, db_record)
-    logger.info(f">>> updated endorser_request for {db_record.record_id} {db_record.state}")
+    logger.info(
+        f">>> updated endorser_request for {db_record.record_id} {db_record.state}"
+    )
 
     return request
 
@@ -85,20 +92,22 @@ async def witness_request(db: AsyncSession, request: WitnessRequest):
     logger.info(f">>> called witness_request with: {request.record_id}")
 
     # fetch existing db object
-    db_record: WitnessRequestDbRecord = await db_fetch_db_txn_record(db, request.record_id)
+    db_record: WitnessRequestDbRecord = await db_fetch_db_txn_record(
+        db, request.record_id
+    )
 
     # witness request and tell aca-py
-    if request.record_type == 'log-entry':
+    if request.record_type == "log-entry":
         response = cast(
-            dict, await au.acapy_POST(
-                f"did/webvh/witness/log-entries?scid={request.scid}"
-            )
+            dict,
+            await au.acapy_POST(f"did/webvh/witness/log-entries?scid={request.scid}"),
         )
-    elif request.record_type == 'attested-resource':
+    elif request.record_type == "attested-resource":
         response = cast(
-            dict, await au.acapy_POST(
+            dict,
+            await au.acapy_POST(
                 f"did/webvh/witness/attested-resources?scid={request.scid}"
-            )
+            ),
         )
 
     # update local db state
@@ -114,13 +123,16 @@ async def reject_request(db: AsyncSession, request: WitnessRequest):
     logger.info(f">>> called reject_request with: {request.record_id}")
 
     # fetch existing db object
-    db_record: WitnessRequestDbRecord = await db_fetch_db_txn_record(db, request.record_id)
+    db_record: WitnessRequestDbRecord = await db_fetch_db_txn_record(
+        db, request.record_id
+    )
 
     # reject request and tell aca-py
     response = cast(
-        dict, await au.acapy_DELETE(
+        dict,
+        await au.acapy_DELETE(
             f"did/webvh/witness/{request.record_type}?scid={request.scid}"
-        )
+        ),
     )
 
     # update local db state

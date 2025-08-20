@@ -4,6 +4,7 @@ Models of the Endorser tables for EndorseRequests (Author Endorse Requests)
 and related data.
 
 """
+
 import uuid
 from datetime import datetime
 from typing import List, Optional

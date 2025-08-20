@@ -136,5 +136,5 @@ async def process_webhook(
     except Exception as e:
         logger.error(">>> auto-stepper returned error:" + str(e))
         traceback.print_exc()
-        
+
     return result if isinstance(result, dict) else result.model_dump()

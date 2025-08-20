@@ -109,9 +109,7 @@ async def db_get_txn_records(
     total_count: int = count_q_rec.scalar() or 0
 
     # add in our paging and ordering to get the result set
-    results_q = (
-        base_q.limit(limit).offset(skip).order_by(desc(EndorseRequest.created_at))
-    )
+    results_q = base_q.limit(limit).offset(skip).order_by(desc(EndorseRequest.created_at))
 
     results_q_recs = await db.execute(results_q)
     db_txns: list[EndorseRequest] = results_q_recs.scalars().all()

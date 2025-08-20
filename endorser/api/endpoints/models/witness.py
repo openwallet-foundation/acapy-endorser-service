@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 class WitnessRequest(BaseModel):
     """Represent a witnessing request."""
-    
+
     scid: str
     state: str
     record: dict
@@ -24,11 +24,11 @@ def webhook_to_witness_object(payload: dict) -> WitnessRequest:
     """Convert from a webhook payload to a witness request."""
     logger.debug(f">>> from payload: {payload}")
     request: WitnessRequest = WitnessRequest(
-        scid=payload.get('scid'),
-        state=payload.get('state'),
-        record=payload.get('record'),
-        record_id=payload.get('record_id'),
-        record_type=payload.get('record_type'),
+        scid=payload.get("scid"),
+        state=payload.get("state"),
+        record=payload.get("record"),
+        record_id=payload.get("record_id"),
+        record_type=payload.get("record_type"),
     )
     logger.debug(f">>> to witness request: {request}")
     return request
@@ -37,15 +37,18 @@ def webhook_to_witness_object(payload: dict) -> WitnessRequest:
 def request_to_db_object(request: WitnessRequest) -> WitnessRequestDbRecord:
     """Convert from model object to database model object."""
     logger.debug(f">>> from request: {request}")
-    if request.record_type == 'log-entry':
-        did = request.record.get('state', {}).get('id', None)
-    elif request.record_type == 'attested-resource':
-        did = request.record.get('id', '').split('/')[0]
+    if request.record_type == "log-entry":
+        did = request.record.get("state", {}).get("id", None)
+    elif request.record_type == "attested-resource":
+        did = request.record.get("id", "").split("/")[0]
     else:
         pass
-    did_parts = did.split(':')
+    did_parts = did.split(":")
     (scid, domain, namespace, identifier) = (
-        did_parts[2], did_parts[3], did_parts[4], did_parts[5]
+        did_parts[2],
+        did_parts[3],
+        did_parts[4],
+        did_parts[5],
     )
     if scid != request.scid:
         pass

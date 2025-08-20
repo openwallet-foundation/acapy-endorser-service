@@ -40,7 +40,7 @@ from api.endpoints.models.allow import (
     AllowedPublicDid,
     AllowedPublicDidList,
     AllowedSchemaList,
-    AllowedLogEntryList
+    AllowedLogEntryList,
 )
 from api.services.allow_lists import add_to_allow_list, updated_allowed
 
@@ -485,7 +485,6 @@ async def append_config(
         )
     except Exception as e:
         raise HTTPException(status_code=db_to_http_exception(e), detail=str(e))
-
 
 
 @router.get(

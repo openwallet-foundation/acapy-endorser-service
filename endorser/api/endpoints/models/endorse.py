@@ -104,9 +104,7 @@ def webhook_to_txn_object(payload: dict, endorser_did: str) -> EndorseTransactio
     else:
         transaction_response = {}
     transaction: EndorseTransaction = EndorseTransaction(
-        author_goal_code=payload.get("signature_request", [])[0].get(
-            "author_goal_code"
-        ),
+        author_goal_code=payload.get("signature_request", [])[0].get("author_goal_code"),
         connection_id=UUID(payload.get("connection_id")),
         transaction_id=UUID(payload.get("transaction_id")),
         tags=[],
@@ -158,15 +156,11 @@ def db_to_txn_object(
 ) -> EndorseTransaction:
     """Convert from database and acapy objects to model object."""
     if acapy_txn:
-        transaction_request = json.loads(
-            acapy_txn["messages_attach"][0]["data"]["json"]
-        )
+        transaction_request = json.loads(acapy_txn["messages_attach"][0]["data"]["json"])
         transaction_request.get("operation")
         if 0 < len(acapy_txn["signature_response"]):
             transaction_response = json.loads(
-                acapy_txn["signature_response"][0]["signature"][
-                    txn_request.endorser_did
-                ]
+                acapy_txn["signature_response"][0]["signature"][txn_request.endorser_did]
             )
         else:
             transaction_response = {}
