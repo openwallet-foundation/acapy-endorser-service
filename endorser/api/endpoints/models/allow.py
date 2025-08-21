@@ -90,7 +90,7 @@ class AllowedLogEntryList(BaseModel):
         page_num (int): The current page number.
         count (int): The number of items in the current page.
         total_count (int): The total number of items across all pages.
-        log_entries (list[AllowedLogEntries]): The list of allowed log entries.
+        log_entries (list[AllowedLogEntry]): The list of allowed log entries.
     """
 
     page_size: int
