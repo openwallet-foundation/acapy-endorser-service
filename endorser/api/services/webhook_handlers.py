@@ -120,7 +120,7 @@ async def handle_log_entry_pending(db: AsyncSession, payload: dict):
 
 
 async def handle_attested_resource_pending(db: AsyncSession, payload: dict):
-    """Update status for a refused log entry."""
+    """Handle a pending attested resource by storing the witness request."""
     logger.info(">>> in handle_attested_resource_pending() ...")
     witness_request: WitnessRequest = webhook_to_witness_object(payload)
     result = await store_witness_request(db, witness_request)
