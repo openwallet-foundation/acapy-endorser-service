@@ -79,7 +79,7 @@ async def update_witnessing_status(db: AsyncSession, request: WitnessRequest):
     db_record.state = request.state
     db_record = await db_update_db_txn_record(db, db_record)
     logger.info(
-        f">>> updated endorser_request for {db_record.record_id} {db_record.state}"
+        f">>> updated witness_request for {db_record.record_id} {db_record.state}"
     )
 
     return request
