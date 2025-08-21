@@ -210,7 +210,7 @@ async def allowed_publish_did(db: AsyncSession, did: str) -> bool:
 
 
 async def allowed_log_entry(db: AsyncSession, log_entry: LogEntryCriteria) -> bool:
-    """Check if creating a schema is allowed."""
+    """Check if creating a log entry is allowed."""
     return await check_auto_endorse(
         db,
         AllowedLogEntry,
