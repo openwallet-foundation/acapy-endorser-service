@@ -111,7 +111,7 @@ async def witness_request(db: AsyncSession, request: WitnessRequest):
     # update local db state
     db_record.state = "witnessed"
     db_record = await db_update_db_txn_record(db, db_record)
-    logger.info(f">>> endorsed endorser_request for {db_record.record_id}")
+    logger.info(f">>> witnessed witness_request for {db_record.record_id}")
 
     return db_record
 
