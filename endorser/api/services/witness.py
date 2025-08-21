@@ -68,7 +68,7 @@ async def store_witness_request(db: AsyncSession, request: WitnessRequest):
 
 async def update_witnessing_status(db: AsyncSession, request: WitnessRequest):
     """Update the status of an witnessing request."""
-    logger.info(f">>> called update_endorsement_status with: {request.record_id}")
+    logger.info(f">>> called update_witnessing_status with: {request.record_id}")
 
     # fetch existing db object
     db_record: WitnessRequestDbRecord = await db_fetch_db_txn_record(
