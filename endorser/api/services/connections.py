@@ -180,9 +180,7 @@ async def accept_connection_request(
     db: AsyncSession, connection: Connection
 ) -> Connection:
     """Accepts a connection request and updates the corresponding database record."""
-    logger.info(
-        f">>> called accept_connection_request with: {connection.connection_id}"
-    )
+    logger.info(f">>> called accept_connection_request with: {connection.connection_id}")
 
     # fetch existing db object
     db_contact: Contact = await db_fetch_db_contact_record(db, connection.connection_id)
@@ -213,9 +211,7 @@ async def update_connection_status(
     db: AsyncSession, connection: Connection
 ) -> Connection:
     """Update the status of a connection in the database."""
-    logger.debug(
-        f">>> called update_connection_status with: {connection.connection_id}"
-    )
+    logger.debug(f">>> called update_connection_status with: {connection.connection_id}")
 
     # fetch existing db object
     db_contact: Contact = await db_fetch_db_contact_record(db, connection.connection_id)
@@ -249,9 +245,7 @@ async def set_connection_author_metadata(
     logger.info(
         f">>> Setting meta-data for connection: {Connection}, with params: {params}"
     )
-    await au.acapy_POST(
-        f"transactions/{connection_id}/set-endorser-role", params=params
-    )
+    await au.acapy_POST(f"transactions/{connection_id}/set-endorser-role", params=params)
     return {}
 
 

@@ -109,9 +109,7 @@ async def db_get_txn_records(
     total_count: int = count_q_rec.scalar() or 0
 
     # add in our paging and ordering to get the result set
-    results_q = (
-        base_q.limit(limit).offset(skip).order_by(desc(EndorseRequest.created_at))
-    )
+    results_q = base_q.limit(limit).offset(skip).order_by(desc(EndorseRequest.created_at))
 
     results_q_recs = await db.execute(results_q)
     db_txns: list[EndorseRequest] = results_q_recs.scalars().all()
@@ -190,7 +188,7 @@ async def reject_transaction(db: AsyncSession, txn: EndorseTransaction):
     # fetch existing db object
     db_txn: EndorseRequest = await db_fetch_db_txn_record(db, txn.transaction_id)
 
-    # endorse transaction and tell aca-py
+    # reject transaction and tell aca-py
     response = cast(
         dict, await au.acapy_POST(f"transactions/{txn.transaction_id}/refuse")
     )
