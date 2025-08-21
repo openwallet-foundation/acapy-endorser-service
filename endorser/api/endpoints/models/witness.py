@@ -42,7 +42,8 @@ def request_to_db_object(request: WitnessRequest) -> WitnessRequestDbRecord:
     elif request.record_type == "attested-resource":
         did = request.record.get("id", "").split("/")[0]
     else:
-        pass
+        logger.error(f"Unexpected record_type: {request.record_type}")
+        raise ValueError(f"Unexpected record_type: {request.record_type}")
     did_parts = did.split(":")
     (scid, domain, namespace, identifier) = (
         did_parts[2],
