@@ -2,7 +2,7 @@
 
 ## About this Document
 
-This document document defines how security vulnerability reporting is handled
+This document defines how security vulnerability reporting is handled
 in this project. The approach aligns with the [OpenWallet Foundation's security vulnerability disclosure policy].
 Please review that document to understand
 the basis of the security reporting for this project
