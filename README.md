@@ -2,7 +2,7 @@
 
 # ACA-Py Endorser Service
 
-This repository provides an Endoser agent, based on [A Cloud Agent - Python (or Aca-Py)](https://github.com/openwallet-foundation/acapy).
+This repository provides an Endorser agent, based on [A Cloud Agent - Python (or Aca-Py)](https://github.com/openwallet-foundation/acapy).
 
 Information about Aca-Py's Endorser support can be found [here](https://github.com/openwallet-foundation/acapy/blob/main/docs/features/Endorser.md).
 
