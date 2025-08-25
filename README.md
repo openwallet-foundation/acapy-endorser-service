@@ -1,13 +1,12 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![Lifecycle:Maturing](https://img.shields.io/badge/Lifecycle-Maturing-007EC6)](https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md)
 
-# Aries - Endorser Service
+# ACA-Py Endorser Service
 
-This repository provides an Endoser agent, based on [Aries Cloudagent Python (or Aca-Py)](https://github.com/hyperledger/aries-cloudagent-python).
+This repository provides an Endorser agent, based on [A Cloud Agent - Python (or Aca-Py)](https://github.com/openwallet-foundation/acapy).
 
-Information about Aca-Py's Endorser support can be found [here](https://github.com/hyperledger/aries-cloudagent-python/blob/main/Endorser.md).
+Information about Aca-Py's Endorser support can be found [here](https://github.com/openwallet-foundation/acapy/blob/main/docs/features/Endorser.md).
 
-The Aca-Py Alice/Faber demo also demonstrates the use of the Endorser feature, as described [here](https://github.com/hyperledger/aries-cloudagent-python/blob/main/demo/Endorser.md).
+The Aca-Py Alice/Faber demo also demonstrates the use of the Endorser feature, as described [here](https://github.com/openwallet-foundation/acapy/blob/main/docs/demo/Endorser.md).
 
 This repository is a work in progress, see [this document](https://hackmd.io/hWMLdpu7SBuopNag4mTbcg?view) for the ongoing requirements and design.
 
@@ -34,8 +33,8 @@ cd indy-tails-server/docker
 Then, to get the endorser service up and running quickly, open a bash shell and run the following:
 
 ```bash
-git clone https://github.com/bcgov/aries-endorser-service.git
-cd aries-endorser-service/docker
+git clone https://github.com/openwallet-foundation/acapy-endorser-service.git
+cd acapy-endorser-service/docker
 ./manage build
 ./manage start --logs
 ```
@@ -311,8 +310,8 @@ You can also test using [traction](https://github.com/bcgov/traction).
 Open a bash shell and startup the endorser services:
 
 ```bash
-git clone https://github.com/bcgov/aries-endorser-service.git
-cd aries-endorser-service/docker
+git clone https://github.com/openwallet-foundation/acapy-endorser-service.git
+cd acapy-endorser-service/docker
 ./manage build
 # note we start with a "known" endorser DID
 # ... and we need to point to the same ledger and tails server as traction ...
@@ -347,11 +346,7 @@ Traction integration tests create new tenants for each test, so you can rebuild/
 
 # Credit
 
-The initial implementation of the Aries Endorser Service was developed by the Government of British Columbia’s Digital Trust Team in Canada, and is based on [aries-cloudagent-python](https://github.com/hyperledger/aries-cloudagent-python) and [traction](https://github.com/bcgov/traction). To learn more about what’s happening with decentralized identity and digital trust in British Columbia, check out https://digital.gov.bc.ca/digital-trust.
-
-# Additional resources
-
-Example OpenShift configurations for deploying an Aries Endorser Service instance can be found in the [Aries Endorser Configurations](https://github.com/bcgov/dts-endorser-service) project.
+The initial implementation of the Endorser Service was developed by the Government of British Columbia’s Digital Trust Team in Canada, and is based on [acapy](https://github.com/openwallet-foundation/acapy) and [traction](https://github.com/bcgov/traction).
 
 # Contributing
 
@@ -367,7 +362,7 @@ To log bugs/issues/feature requests, please file an [issue](../../issues).
 
 ## Reporting security issues
 
-Please refer to the [Hyperledger Security Policy](SECURITY.md) for details.
+Please refer to the [OpenWallet Foundation Security Policy](SECURITY.md) for details.
 
 # License
 

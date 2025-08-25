@@ -1,7 +1,7 @@
 services:
-  aries-endorser-proxy:
+  acapy-endorser-proxy:
     image: caddy
-    hostname: aries-endorser-proxy
+    hostname: acapy-endorser-proxy
     environment:
       - CADDY_AGENT_PORT=${CADDY_AGENT_PORT}
       - CADDY_AGENT_ADMIN_PORT=${CADDY_AGENT_ADMIN_PORT}
@@ -35,12 +35,12 @@ services:
       - ${NGROK_ENDORSER_AGENT_PORT_EXPOSED}:${NGROK_ENDORSER_AGENT_PORT}
     command: http ${CADDY_HOST}:${CADDY_AGENT_PORT} --log stdout
 
-  aries-endorser-agent:
+  acapy-endorser-agent:
     build:
       context: ./acapy
       dockerfile: Dockerfile.acapy
     depends_on:
-      aries-endorser-wallet:
+      acapy-endorser-wallet:
         condition: service_healthy
     environment:
       - ENDORSER_ENV=${ENDORSER_ENV}
@@ -84,7 +84,7 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
 
-  aries-endorser-wallet:
+  acapy-endorser-wallet:
     image: postgres:16-alpine
     environment:
       POSTGRES_USER: ${WALLET_POSTGRESQL_USER}
@@ -99,7 +99,7 @@ services:
       timeout: 5s
       retries: 5
 
-  aries-endorser-api:
+  acapy-endorser-api:
     build:
       context: ..
       dockerfile: ./endorser/Dockerfile.endorser
@@ -121,9 +121,9 @@ services:
         /app/docker-entrypoint.sh;
       fi"
     depends_on:
-      aries-endorser-agent:
+      acapy-endorser-agent:
         condition: service_started
-      aries-endorser-api-db:
+      acapy-endorser-api-db:
         condition: service_healthy
     environment:
       - CONTROLLER_POSTGRESQL_HOST=${CONTROLLER_POSTGRESQL_HOST}
@@ -158,7 +158,7 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
 
-  aries-endorser-api-db:
+  acapy-endorser-api-db:
     image: postgres:16-alpine
     environment:
       - POSTGRES_USER=${POSTGRESQL_USER}
@@ -179,12 +179,12 @@ services:
       timeout: 5s
       retries: 5
 
-  aries-author-agent:
+  acapy-author-agent:
     build:
       context: ./acapy
       dockerfile: Dockerfile.acapy
     depends_on:
-      aries-author-wallet:
+      acapy-author-wallet:
         condition: service_healthy
     ports:
       - ${ACAPY_AUTHOR_ADMIN_PORT}:${ACAPY_AUTHOR_ADMIN_PORT}
@@ -244,7 +244,7 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
 
-  aries-author-wallet:
+  acapy-author-wallet:
     image: postgres:16-alpine
     environment:
       POSTGRES_USER: ${AUTHOR_WALLET_POSTGRESQL_USER}
@@ -267,7 +267,7 @@ services:
       - ENDORSER_API_ADMIN_USER=${ENDORSER_API_ADMIN_USER}
       - ENDORSER_API_ADMIN_KEY=${ENDORSER_API_ADMIN_KEY}
       - ENDORSER_SERVICE_PORT=${ENDORSER_SERVICE_PORT}
-      - ENDORSER_SERVICE_BASE_URL=http://aries-endorser-api:${ENDORSER_SERVICE_PORT}
+      - ENDORSER_SERVICE_BASE_URL=http://acapy-endorser-api:${ENDORSER_SERVICE_PORT}
       - ACAPY_ADMIN_URL=${ENDORSER_ACAPY_ADMIN_URL}
       - ACAPY_API_ADMIN_KEY=${ACAPY_API_ADMIN_KEY}
       - ENDORSER_ENV=${ENDORSER_ENV}
@@ -279,7 +279,7 @@ services:
       - TAILS_SERVER_URL=${TAILS_SERVER_URL}
       - ACAPY_AUTHOR_API_ADMIN_KEY=${ACAPY_AUTHOR_API_ADMIN_KEY}
       - ACAPY_AUTHOR_ADMIN_PORT=${ACAPY_AUTHOR_ADMIN_PORT}
-      - ACAPY_AUTHOR_BASE_URL=http://aries-author-agent:${ACAPY_AUTHOR_ADMIN_PORT}
+      - ACAPY_AUTHOR_BASE_URL=http://acapy-author-agent:${ACAPY_AUTHOR_ADMIN_PORT}
       - AUTHOR_AGENT_NAME=${AUTHOR_AGENT_NAME}
       - AUTHOR_ENDORSER_AlIAS=${AUTHOR_ENDORSER_AlIAS}
 

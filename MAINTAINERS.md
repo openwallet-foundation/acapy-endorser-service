@@ -1,102 +1,91 @@
 # Maintainers
 
-<!-- Please keep all lists sorted alphabetically by github -->
+## Maintainer Scopes, GitHub Roles and GitHub Teams
 
-## Active Maintainers
+The Maintainers of this repo, defined as GitHub users with escalated privileges
+in the repo, are managed in the OpenWallet Foundation "governance" repo's [access-control.yaml](https://github.com/openwallet-foundation/governance/blob/main/config.yaml) file. Consult that to see:
 
-<!-- aries-cloudagent-python committers group has maintainer access to aries-endorser-service -->
+- What teams have escalated privileges to this repository.
+- What GitHub roles those teams have in the repository.
+- Who are the members of each of those teams.
 
-| Name             | Github           | LFID             |
-| ---------------- | ---------------- | ---------------- |
-| Ian Costanzo     | ianco            | ianco            |
-| Stephen Curran   | swcurran         | swcurran         |
-| Wade Barnes      | WadeBarnes       | WadeBarnes       |
-| Emiliano Sune    | esune            | esune            |
-| Gavin Freeborn   | gavinok          |                  |
+The actions covered below for [becoming](#becoming-a-maintainer) and [removing](#removing-maintainers) are made manifest through PRs to that file.
+
+## The Duties of a Maintainer
+
+Maintainers are expected to perform the following duties for this repository. The duties are listed in more or less priority order:
+
+- Review, respond, and act on any security vulnerabilities reported against the repository.
+- Review, provide feedback on, and merge or reject GitHub Pull Requests from
+  Contributors.
+- Review, triage, comment on, and close GitHub Issues
+  submitted by Contributors.
+- When appropriate, lead/facilitate architectural discussions in the community.
+- When appropriate, lead/facilitate the creation of a product roadmap.
+- Create, clarify, and label issues to be worked on by Contributors.
+- Ensure that there is a well defined (and ideally automated) product test and
+  release pipeline, including the publication of release artifacts.
+- When appropriate, execute the product release process.
+- Maintain the repository CONTRIBUTING.md file and getting started documents to
+  give guidance and encouragement to those wanting to contribute to the product, and those wanting to become maintainers.
+- Contribute to the product via GitHub Pull Requests.
+- Monitor requests from the OpenWallet Foundation Technical Advisory Council about the
+contents and management of [OpenWallet Foundation](https://github.com/openwallet-foundation) repositories, such as branch handling,
+required files in repositories and so on.
+- Contribute to the ACA-Py Project's Annual Reports to the OpenWallet Foundation Technical Advisory Council.
 
 ## Becoming a Maintainer
 
-Aries Endorser Service welcomes community contribution.
-Each community member may progress to become a maintainer.
+This community welcomes contributions. Interested contributors are encouraged to
+progress to become maintainers. To become a maintainer the following steps
+occur, roughly in order.
 
-How to become a maintainer:
-
-- Contribute significantly to the code in this repository.
-  
-### Maintainers contribution requirement
-
-The requirement to be able to be proposed as a maintainer is:
-
-- 5 significant changes on code have been authored in this repository by the proposed maintainer and accepted (merged PRs).
-  
-### Maintainers approval process
-
-The following steps must occur for a contributor to be "upgraded" as a maintainer:
-
-- The proposed maintainer has the sponsorship of at least one other maintainer.
-  - This sponsoring maintainer will create a proposal PR modifying the list of
-    maintainers. (see [proposal PR template](#proposal-pr-template).)
-  - The proposed maintainer accepts the nomination and expresses a willingness
-    to be a long-term (more than 6 month) committer by adding a comment in the proposal PR.
-  - The PR will be communicated in all appropriate communication channels
-    including at least [aries-contributors channel on Hyperledger Discord](https://discord.gg/hyperledger),
-    the [mailing list](https://lists.hyperledger.org/g/aries)
-    and any maintainer/community call.
-- Approval by at least 3 current maintainers within two weeks of the proposal or
-  an absolute majority (half the total + 1) of current maintainers.
-  - Maintainers will vote by approving the proposal PR.
-- No veto raised by another maintainer within the voting timeframe.
-  - All vetoes must be accompanied by a public explanation as a comment in the
-    proposal PR.
-  - A veto can be retracted, in that case the voting timeframe is reset and all approvals are removed.
-  - It is bad form to veto, retract, and veto again.
-  
-The proposed maintainer becomes a maintainer either:
-
-  - when two weeks have passed without veto since the third approval of the proposal PR,
-  - or an absolute majority of maintainers approved the proposal PR.
-
-In either case, no maintainer raised and stood by a veto.
+- The proposed maintainer establishes their reputation in the community,
+  including authoring five (5) significant merged pull requests, and expresses
+  an interest in becoming a maintainer for the repository.
+- An issue is created to add the proposed maintainer to the list of active maintainers.
+- The issue is authored by an existing maintainer or has a comment on the PR from an existing maintainer supporting the proposal.
+- The issue is authored by the proposed maintainer or has a comment on the issue from the proposed maintainer confirming their interest in being a maintainer.
+  - The issue or comment from the proposed maintainer must include their
+    willingness to be a long-term (more than 6 month) maintainer.
+- Once the issue and necessary comments have been received, an approval timeframe begins.
+- The issue **MUST** be communicated on all appropriate communication channels, including relevant community calls, chat channels and mailing lists. Comments of support from the community are welcome.
+- The issue is approved and the proposed maintainer becomes a maintainer if either:
+  - Two weeks have passed since at least three (3) Maintainer issue approvals have been recorded, OR
+  - An absolute majority of maintainers have approved the issue.
+- If the issue does not get the requisite approvals, it may be closed.
+- Once the add maintainer issue has been approved, the necessary updates to the GitHub Teams are made via a PR to the OpenWallet Foundation "governance" repo's [access-control.yaml](https://github.com/openwallet-foundation/governance/blob/main/config.yaml) file.
 
 ## Removing Maintainers
 
-Being a maintainer is not a status symbol or a title to be maintained indefinitely.
-
-It will occasionally be necessary and appropriate to move a maintainer to emeritus status.
-
-This can occur in the following situations:
+Being a maintainer is not a status symbol or a title to be carried
+indefinitely. It will occasionally be necessary and appropriate to move a
+maintainer to emeritus status. This can occur in the following situations:
 
 - Resignation of a maintainer.
 - Violation of the Code of Conduct warranting removal.
 - Inactivity.
   - A general measure of inactivity will be no commits or code review comments
-    for two reporting quarters, although this will not be strictly enforced if
+    for one reporting quarter. This will not be strictly enforced if
     the maintainer expresses a reasonable intent to continue contributing.
   - Reasonable exceptions to inactivity will be granted for known long term
     leave such as parental leave and medical leave.
-- Other unspecified circumstances.
+- Other circumstances at the discretion of the other Maintainers.
 
-As for adding a maintainer, the record and governance process for moving a
-maintainer to emeritus status is recorded using review approval in the PR making that change.
+The process to move a maintainer from active to emeritus status is comparable to the process for adding a maintainer, outlined above. In the case of voluntary
+resignation, the Pull Request can be merged following a maintainer issue approval. If the removal is for any other reason, the following steps **SHOULD** be followed:
+
+- An issue is created to move the maintainer to the list of emeritus maintainers.
+- The issue is authored by, or has a comment supporting the proposal from, an existing maintainer or OpenWallet Foundation GitHub organization administrator.
+- Once the issue and necessary comments have been received, the approval timeframe begins.
+- The issue **MAY** be communicated on appropriate communication channels, including relevant community calls, chat channels and mailing lists.
+- The issue is approved and the maintainer transitions to maintainer emeritus if:
+  - The issue is approved by the maintainer to be transitioned, OR
+  - Two weeks have passed since at least three (3) Maintainer issue approvals have been recorded, OR
+  - An absolute majority of maintainers have approved the issue.
+- If the issue does not get the requisite approvals, it may be closed.
+- Once the remove maintainer issue has been approved, the necessary updates to the GitHub Teams are made via a PR to the OpenWallet Foundation "governance" repo's [access-control.yaml](https://github.com/openwallet-foundation/governance/blob/main/config.yaml) file.
 
 Returning to active status from emeritus status uses the same steps as adding a
-new maintainer.
-
-Note that the emeritus maintainer always already has the required significant contributions.
-There is no contribution prescription delay.
-
-## Proposal PR template
-
-```markdown
-I propose to add [maintainer github handle] as a Aries Endorser Service project maintainer.
-
-[maintainer github handle] contributed with many high quality commits:
-
-- [list significant achievements]
-
-Here are [their past contributions on Aries Endorser Service project](https://github.com/hyperledger/aries-endorser-service/commits?author=[user github handle]).
-
-Voting ends two weeks from today.
-
-For more information on this process see the Becoming a Maintainer section in the [MAINTAINERS.md](https://github.com/bcgov/aries-endorser-service/blob/main/MAINTAINERS.md) file.
-```
+new maintainer. Note that the emeritus maintainer already has the 5 required
+significant changes as there is no contribution time horizon for those.

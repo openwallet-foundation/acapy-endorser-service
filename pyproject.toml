@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "aries_endorser_service"
+name = "acapy_endorser_service"
 version = "0.0.1"
-description = "Hyperledger Aries Endorser Service is a controller for an Aries Cloudagent Python agent acting as endorser."
-authors = ["Hyperledger Aries <aries@lists.hyperledger.org>"]
+description = "ACA-Py Endorser Service is a controller for a Python Cloud Agent acting as endorser."
+authors = ["OpenWallet Foundation"]
 license = "Apache-2.0"
 readme = "README.md"
 packages = [{include = "endorser"}]
@@ -11,7 +11,7 @@ classifiers = [
             "License :: OSI Approved :: Apache Software License",
 	        "Operating System :: OS Independent",
 ]
-repository = "https://github.com/hyperledger/aries-endorser-service"
+repository = "https://github.com/openwallet-foundation/acapy-endorser-service"
 package-mode = false
 
 
