@@ -35,7 +35,6 @@ def step_impl(context):
         f'{ENDORSER_ACAPY_ADMIN_URL}/did/webvh/configuration',
         headers=endorser_agent_headers(context),
         data={
-            'server_url': WEBVH_SERVER_URL,
             'witness': True
         }
     ))
@@ -64,7 +63,6 @@ def step_impl(context, author: str):
         POST,
         '/did/webvh/configuration',
         data={
-            'server_url': WEBVH_SERVER_URL,
             'witness': False,
             'witness_invitation': witness_invitation,
             'endorsement': True
