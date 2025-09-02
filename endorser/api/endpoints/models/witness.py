@@ -52,7 +52,7 @@ def request_to_db_object(request: WitnessRequest) -> WitnessRequestDbRecord:
         did_parts[5],
     )
     if scid != request.scid:
-        pass
+        logger.warning(f"Data inconsistency: derived scid '{scid}' does not match request.scid '{request.scid}'")
     db_record: WitnessRequestDbRecord = WitnessRequestDbRecord(
         scid=scid,
         domain=domain,
