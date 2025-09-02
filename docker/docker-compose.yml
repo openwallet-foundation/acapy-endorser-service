@@ -1,3 +1,7 @@
+networks:
+  endorser-net:
+    driver: bridge
+
 services:
   aries-endorser-proxy:
     image: caddy
@@ -24,6 +28,8 @@ services:
       timeout: 3s
       start_period: 10s
       retries: 5
+    networks:
+      - endorser-net
 
   ngrok-endorser-agent:
     image: ngrok/ngrok
@@ -34,6 +40,8 @@ services:
     ports:
       - ${NGROK_ENDORSER_AGENT_PORT_EXPOSED}:${NGROK_ENDORSER_AGENT_PORT}
     command: http ${CADDY_HOST}:${CADDY_AGENT_PORT} --log stdout
+    networks:
+      - endorser-net
 
   aries-endorser-agent:
     build:
@@ -65,7 +73,6 @@ services:
       - LOG_LEVEL=${LOG_LEVEL}
       - ACAPY_REQUESTS_THROUGH_PUBLIC_DID=true
       - ACAPY_PLUGIN=webvh
-      - ACAPY_PLUGIN_CONFIG=/home/aries/webvh-plugin.yml
       - WEBVH_SERVER_URL=${WEBVH_SERVER_URL}
     ports:
       - ${ACAPY_ADMIN_PORT_EXPOSED}:${ACAPY_ADMIN_PORT}
@@ -83,6 +90,8 @@ services:
       ]
     extra_hosts:
       - host.docker.internal:host-gateway
+    networks:
+      - endorser-net
 
   aries-endorser-wallet:
     image: postgres:16-alpine
@@ -98,6 +107,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - endorser-net
 
   aries-endorser-api:
     build:
@@ -157,6 +168,8 @@ services:
       - 5678:5678
     extra_hosts:
       - host.docker.internal:host-gateway
+    networks:
+      - endorser-net
 
   aries-endorser-api-db:
     image: postgres:16-alpine
@@ -178,6 +191,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - endorser-net
 
   aries-author-agent:
     build:
@@ -189,6 +204,9 @@ services:
     ports:
       - ${ACAPY_AUTHOR_ADMIN_PORT}:${ACAPY_AUTHOR_ADMIN_PORT}
       - ${ACAPY_AUTHOR_HTTP_PORT}:${ACAPY_AUTHOR_HTTP_PORT}
+    configs:
+      - source: webvh-plugin.yml
+        target: /home/aries/webvh-plugin.yml
     environment:
       - AUTHOR_ENV=${AUTHOR_ENV}
       - ACAPY_HTTP_PORT=${ACAPY_AUTHOR_HTTP_PORT}
@@ -207,6 +225,7 @@ services:
       - AUTHOR_AGENT_NAME=${AUTHOR_AGENT_NAME}
       - ACAPY_AUTHOR_ADMIN_CONFIG=${ACAPY_AUTHOR_ADMIN_CONFIG}
       - LOG_LEVEL=${LOG_LEVEL}
+      - ACAPY_PLUGIN=webvh
     entrypoint: /bin/bash
     command: [
         "-c",
@@ -239,10 +258,13 @@ services:
             --auto-request-endorsement \
             --auto-write-transactions \
             --auto-create-revocation-transactions \
-            --log-level '${LOG_LEVEL}'"
+            --log-level '${LOG_LEVEL}' \
+            --arg-file /home/aries/webvh-plugin.yml"
       ]
     extra_hosts:
       - host.docker.internal:host-gateway
+    networks:
+      - endorser-net
 
   aries-author-wallet:
     image: postgres:16-alpine
@@ -258,6 +280,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - endorser-net
 
   bdd-tests:
     build:
@@ -282,6 +306,9 @@ services:
       - ACAPY_AUTHOR_BASE_URL=http://aries-author-agent:${ACAPY_AUTHOR_ADMIN_PORT}
       - AUTHOR_AGENT_NAME=${AUTHOR_AGENT_NAME}
       - AUTHOR_ENDORSER_AlIAS=${AUTHOR_ENDORSER_AlIAS}
+      - WEBVH_SERVER_URL=${WEBVH_SERVER_URL}
+    networks:
+      - endorser-net
 
 volumes:
   endorser-wallet:
@@ -291,7 +318,5 @@ volumes:
 configs:
   webvh-plugin.yml:
     content: |
-      plugin:
-        - webvh
       plugin-config-value:
         - did-webvh.server_url=${WEBVH_SERVER_URL}
