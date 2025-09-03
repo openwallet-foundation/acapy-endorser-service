@@ -25,7 +25,8 @@ from util import (
     put_author_context,
     get_author_context,
     put_endorser_context,
-    get_endorser_context
+    get_endorser_context,
+    set_endorser_config
 )
 
 @given("the witness plugin is configured")
@@ -57,7 +58,7 @@ def step_impl(context):
 @when('"{author}" receives the invitation')
 def step_impl(context, author: str):
     witness_invitation = get_endorser_context(context, 'witness_invitation')
-    assert (webvh_config := call_author_service(
+    assert (call_author_service(
         context,
         author,
         POST,
@@ -84,7 +85,7 @@ def step_impl(context, author: str):
 def step_impl(context, author: str):
     """Publish initial log entry."""
     identifier = str(uuid.uuid4())
-    assert (log_entry := call_author_service(
+    assert (call_author_service(
         context,
         author,
         POST,
@@ -92,7 +93,8 @@ def step_impl(context, author: str):
         data={
             'options': {
                 'namespace': 'test',
-                'identifier': identifier 
+                'identifier': identifier,
+                "witnessThreshold": 1
             }
         }
     ))
@@ -100,11 +102,15 @@ def step_impl(context, author: str):
 
 @then('the witness approved the log entry')
 def step_impl(context):
+    # Wait for the server to precess the log registration
+    time.sleep(5)
     pass
 
 @then('"{author}" has a published did')
 def step_impl(context, author: str):
-    assert (did := call_author_service(
+    
+    # Assert DID is registered locally
+    assert (results := call_author_service(
         context,
         author,
         GET,
@@ -112,10 +118,15 @@ def step_impl(context, author: str):
         params={
             'method': 'webvh'
         }
-    ).get('results', [])[0].get('did', None))
+    ).get('results', []))
+    print(results)
+    assert (did := next(iter(results), {}).get('did', None))
+    assert (scid := did.split(':')[2])
     assert did.split(':')[-1] == context.config.userdata[f"{author}_config"]["identifier"]
     put_author_context(context, author, "did", did)
-    put_author_context(context, author, "scid", did.split(':')[2])
+    put_author_context(context, author, "scid", scid)
+    
+    # Assert DID is resolveable
     assert (did_document := call_author_service(
         context,
         author,
@@ -123,101 +134,49 @@ def step_impl(context, author: str):
         f'/resolver/resolve/{did}',
     ).get('did_document', None))
     assert did_document.get('id') == did
+    
+    # Assert SCID mapping was added
+    assert (call_author_service(
+        context,
+        author,
+        GET,
+        '/did/webvh/configuration',
+    ).get('scids', {}).get(scid, None))
 
-# @when('"{author}" publishes a subsequent did log entry')
-# def step_impl(context, author: str):
-#     """Publish subsequent log entry."""
-#     scid = get_author_context(context, author, "scid")
-#     assert call_http_service(
-#         'POST',
-#         f'{AGENCY_BASE_URL}/did/webvh/verification-methods',
-#         headers=agency_headers,
-#         parameters={
-#             'scid': scid
-#         },
-#         data={
-#             'type': 'multikey'
-#         }
-#     )
-#     did = get_author_context(context, author, "did")
-#     assert (did_document := call_http_service(
-#         'Get',
-#         f'{AGENCY_BASE_URL}/resolver/resolve/{did}',
-#         headers=agency_headers
-#     ).get('did_document', {}))
-#     assert len(did_document.get('verificationMethod', [])) == 2
+@then('the witness rejected the log entry')
+def step_impl(context):
+    # Wait for the server to process the log registration
+    time.sleep(5)
+    pass
 
-
-# @when('"{author}" creates a new schema')
-# def step_impl(context, author: str):
-#     """Create new schema."""
-#     issuer_id = get_author_context(context, author, "did")
-#     assert (schema_state := call_http_service(
-#         'POST',
-#         f'{AGENCY_BASE_URL}/anoncreds/schema',
-#         headers=agency_headers,
-#         data={
-#             'schema': {
-#                 'attrNames': ['givenName'],
-#                 'issuerId': issuer_id,
-#                 'name': 'TestSchema',
-#                 'version': f'1.{str(random.randrange(1000))}'
-#             }
-#         },
-#     ).get('schema_state', {}))
-#     put_author_context(context, author, "schema", schema_state.get('schema'))
-#     put_author_context(context, author, "schema_id", schema_state.get('schema_id'))
-
-
-# @when('"{author}" creates a new cred def')
-# def step_impl(context, author: str):
-#     """Create new cred def."""
-#     issuer_id = get_author_context(context, author, "did")
-#     schema_id = get_author_context(context, author, "schema_id")
-#     assert (cred_def_state := call_http_service(
-#         'POST',
-#         f'{AGENCY_BASE_URL}/anoncreds/credential-definition',
-#         headers=agency_headers,
-#         data={
-#             'credential_definition': {
-#                 'issuerId': issuer_id,
-#                 'schemaId': schema_id,
-#                 'tag': str(uuid.uuid4())
-#             }
-#         },
-#     ).get('credential_definition_state', {}))
-#     put_author_context(
-#         context, author, "cred_def", cred_def_state.get('credential_definition')
-#     )
-#     put_author_context(
-#         context, author, "cred_def_id", cred_def_state.get('credential_definition_id')
-#     )
-
-
-# @when('"{author}" creates a new cred def with revocation')
-# def step_impl(context, author: str):
-#     """Create new cred def with revocation."""
-#     issuer_id = get_author_context(context, author, "did")
-#     schema_id = get_author_context(context, author, "schema_id")
-#     assert (cred_def_state := call_http_service(
-#         'POST',
-#         f'{AGENCY_BASE_URL}/anoncreds/credential-definition',
-#         headers=agency_headers,
-#         data={
-#             'options': {
-#                 'support_revocation': True,
-#                 'revocation_registry_size': 10
-#             },
-#             'credential_definition': {
-#                 'issuerId': issuer_id,
-#                 'schemaId': schema_id,
-#                 'tag': str(uuid.uuid4())
-#             }
-#         },
-#     ).get('credential_definition_state', {}))
-#     put_author_context(
-#         context, author, "cred_def", cred_def_state.get('credential_definition')
-#     )
-#     put_author_context(
-#         context, author, "cred_def_id", cred_def_state.get('credential_definition_id')
-#     )
+@then('"{author}" has no published did')
+def step_impl(context, author: str):
+    # Assert DID isn't registered locally
+    assert (results := call_author_service(
+        context,
+        author,
+        GET,
+        '/wallet/did',
+        params={
+            'method': 'webvh'
+        }
+    ).get('results', [])) == []
+    assert (next(iter(results), {}).get('did', None)) is None
+    
+    # # Assert DID is not resolveable
+    # TODO, resolve did web?
+    # assert (did_document := call_author_service(
+    #     context,
+    #     author,
+    #     GET,
+    #     f'/resolver/resolve/{did}',
+    # ).get('did_document', None))
+    # assert did_document.get('id') == did
+    
+    # Assert no SCID mapping was added
+    assert (call_author_service(
+        context,
+        author,
+        GET,
+        '/did/webvh/configuration',
+    ).get('scids', {})) == {}
