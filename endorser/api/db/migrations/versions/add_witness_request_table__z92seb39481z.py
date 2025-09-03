@@ -68,5 +68,6 @@ def upgrade():
         sa.Column("identifier", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("version", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
         sa.Column("details", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+        sa.Column("log_updates", sa.Boolean(), nullable=True),
         sa.PrimaryKeyConstraint("allowed_log_entry_id"),
     )

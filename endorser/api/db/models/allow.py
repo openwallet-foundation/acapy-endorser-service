@@ -228,6 +228,7 @@ class AllowedLogEntry(BaseModel, table=True):
     namespace: str = Field(nullable=False, default=None)
     identifier: str = Field(nullable=False, default=None)
     version: str = Field(nullable=True, default=None)
+    log_updates: bool = Field(nullable=True, default=False)
 
     details: str = Field(nullable=True, default=None)
     # --- acapy data
