@@ -3,6 +3,7 @@
 Models of the Endorser tables for API configuration.
 
 """
+
 import uuid
 from datetime import datetime
 

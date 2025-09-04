@@ -44,7 +44,7 @@ def step_impl(context, author: str):
         context,
         author,
         POST,
-        f"/wallet/did/create",
+        "/wallet/did/create",
         data={},
     )
     assert "result" in resp, pprint.pp(resp)

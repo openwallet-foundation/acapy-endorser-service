@@ -3,7 +3,7 @@
 This module provides APIs to list, retrieve, update, endorse, and reject transactions.
 It uses an asynchronous SQLAlchemy session for database interactions and is designed
 to work with a FastAPI router. It defines models such as EndorseTransaction and
-EndorseTransactionList to structure responses, and handles errors by raising HTTP 
+EndorseTransactionList to structure responses, and handles errors by raising HTTP
 exceptions with appropriate status codes.
 """
 
@@ -145,9 +145,7 @@ async def endorse_transaction_endpoint(
         HTTPException: If an error occurs during processing.
     """
     try:
-        transaction: EndorseTransaction = await get_transaction_object(
-            db, transaction_id
-        )
+        transaction: EndorseTransaction = await get_transaction_object(db, transaction_id)
         endorsed_txn = await endorse_transaction(db, transaction)
         return endorsed_txn
     except Exception as e:
@@ -180,9 +178,7 @@ async def reject_transaction_endpoint(
                        with the error detail.
     """
     try:
-        transaction: EndorseTransaction = await get_transaction_object(
-            db, transaction_id
-        )
+        transaction: EndorseTransaction = await get_transaction_object(db, transaction_id)
         rejected_txn = await reject_transaction(db, transaction)
         return rejected_txn
     except Exception as e:

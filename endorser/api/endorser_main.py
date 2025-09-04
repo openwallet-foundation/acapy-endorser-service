@@ -97,6 +97,4 @@ async def authenticate_endorser(username: str, password: str) -> bool:
     Returns:
         bool: True if authentication is successful, otherwise False.
     """
-    return (
-        s.ENDORSER_API_ADMIN_USER == username and s.ENDORSER_API_ADMIN_KEY == password
-    )
+    return s.ENDORSER_API_ADMIN_USER == username and s.ENDORSER_API_ADMIN_KEY == password

@@ -23,6 +23,7 @@ from api.services.connections import (
     update_connection_config,
     update_connection_info,
 )
+from api.acapy_utils import acapy_POST
 
 logger = logging.getLogger(__name__)
 
@@ -187,3 +188,19 @@ async def reject_connection(
     """
     # TODO this should send a ProblemReport back to the requester
     raise NotImplementedError
+
+
+@router.post("/witness-invitation")
+async def create_witness_invitation() -> dict:
+    """Create a witness connection invitation.
+
+    This endpoint is used to create a witness invitation with the webvh plugin.
+
+    Returns:
+    - invitation_url: The invitation url.
+    """
+    try:
+        invitation = await acapy_POST("did/webvh/witness-invitation", {})
+        return {"invitation_url": invitation.get("invitation_url")}
+    except Exception as e:
+        raise HTTPException(status_code=HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))

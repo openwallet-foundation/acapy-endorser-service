@@ -14,7 +14,7 @@ from starlette import status
 
 @dataclass
 class AllowedSchema:
-    """AllowedSchema
+    """AllowedSchema.
 
     This is the model for the AllowSchema table
     (postgresql specific dialects in use).
@@ -36,7 +36,7 @@ class AllowedSchema:
 
 @dataclass
 class AllowedPublicDid:
-    """AllowedPublicDid
+    """AllowedPublicDid.
 
     This is the model for the AllowPublicDid table
     (postgresql specific dialects in use).
@@ -52,7 +52,7 @@ class AllowedPublicDid:
 
 @dataclass
 class AllowedCredentialDefinition:
-    """AllowedCredentialDefinition
+    """AllowedCredentialDefinition.
 
     This is the model for the AllowCredentialDefinition table
     (postgresql specific dialects in use).
@@ -90,6 +90,11 @@ ENDORSER_TOKEN_URL = ENDORSER_BASE_URL + "/endorser/token"
 AGENCY_API_KEY = os.getenv("ACAPY_AUTHOR_API_ADMIN_KEY")
 AGENCY_BASE_URL = os.getenv("ACAPY_AUTHOR_BASE_URL")
 
+ENDORSER_ACAPY_ADMIN_URL = os.getenv("ACAPY_ADMIN_URL")
+ENDORSER_API_ADMIN_KEY = os.getenv("ENDORSER_API_ADMIN_KEY")
+AUTHOR_ACAPY_ADMIN_URL = os.getenv("ACAPY_AUTHOR_BASE_URL")
+
+WEBVH_SERVER_URL = os.getenv("WEBVH_SERVER_URL")
 
 GET = "GET"
 POST = "POST"
@@ -173,6 +178,15 @@ def call_endorser_service(
         json_data=json_data,
         files=files,
     )
+
+
+def endorser_agent_headers(context) -> dict:
+    headers = {
+        "accept": "application/json",
+        "Content-Type": "application/json",
+        "X-API-KEY": ENDORSER_API_ADMIN_KEY,
+    }
+    return headers
 
 
 def agency_headers(context) -> dict:

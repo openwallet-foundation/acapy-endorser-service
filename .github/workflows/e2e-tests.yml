@@ -9,6 +9,7 @@ env:
   ACAPY_ENDPOINT: "http://host.docker.internal:8050"
   LEDGER_URL: "http://test.bcovrin.vonx.io"
   TAILS_SERVER_URL: "https://tails-test.vonx.io"
+  WEBVH_SERVER_URL: "https://sandbox.bcvh.vonx.io"
 
 jobs:
   e2e-tests:

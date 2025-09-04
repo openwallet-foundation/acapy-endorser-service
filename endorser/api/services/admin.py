@@ -34,13 +34,21 @@ async def get_endorser_configs(db: AsyncSession) -> dict:
         "wallet/did/public",
     )
 
+    webvh_config = await au.acapy_GET(
+        "did/webvh/configuration",
+    )
+
     endorser_config_list = await get_config_records(db)
     endorser_configs = {}
     for endorser_config in endorser_config_list:
         endorser_configs[endorser_config.config_name] = endorser_config.json()
     endorser_configs["public_did"] = endorser_public_did["result"]
 
-    return {"acapy_config": acapy_config["config"], "endorser_config": endorser_configs}
+    return {
+        "acapy_config": acapy_config["config"],
+        "endorser_config": endorser_configs,
+        "webvh_config": webvh_config,
+    }
 
 
 async def get_endorser_config(db: AsyncSession, config_name: str) -> Configuration:

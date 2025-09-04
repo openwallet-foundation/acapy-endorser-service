@@ -110,7 +110,7 @@ exportEnvironment() {
   else
     export ACAPY_ADMIN_CONFIG=--admin-insecure-mode
   fi
-  export ENDORSER_ACAPY_ADMIN_URL=http://${DOCKERHOST}:${ACAPY_ADMIN_PORT}
+  export ENDORSER_ACAPY_ADMIN_URL=${ENDORSER_ACAPY_ADMIN_URL-http://${DOCKERHOST}:${ACAPY_ADMIN_PORT}}
 
   # endorser agent db
   export WALLET_POSTGRESQL_HOST=acapy-endorser-wallet
@@ -161,7 +161,7 @@ exportEnvironment() {
   else
     export ACAPY_AUTHOR_ADMIN_CONFIG=--admin-insecure-mode
   fi
-  export AUTHOR_ACAPY_ADMIN_URL=http://${DOCKERHOST}:${ACAPY_AUTHOR_ADMIN_PORT}
+  export AUTHOR_ACAPY_ADMIN_URL=${AUTHOR_ACAPY_ADMIN_URL-http://${DOCKERHOST}:${ACAPY_AUTHOR_ADMIN_PORT}}
 
   # author agent db
   export AUTHOR_WALLET_POSTGRESQL_HOST=acapy-author-wallet

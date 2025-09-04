@@ -1,0 +1,83 @@
+services:
+  webvh-endorser-api:
+    build:
+      context: ..
+      dockerfile: ./endorser/Dockerfile.endorser
+    entrypoint: /bin/bash
+    command: >
+      -c "
+      if [ $DEBUGGER ] && [ "$DEBUGGER" == "true" ]; then
+        echo 'Starting in debug mode...'
+        pip install debugpy -t /tmp;
+        python3 -m alembic upgrade head
+        if [ $? == 0 ]; then
+          python /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 -m uvicorn api.main:app --reload --host 0.0.0.0 --port 5000;
+        else
+          echo 'Alembic db upgrade failed...'
+          exit 1
+        fi
+      else
+        echo 'Starting in production mode...'
+        /app/docker-entrypoint.sh;
+      fi"
+    depends_on:
+      webvh-endorser-db:
+        condition: service_healthy
+    environment:
+      - ACAPY_ADMIN_URL=${ACAPY_ADMIN_URL}
+      - ACAPY_ADMIN_URL_API_KEY=${ACAPY_ADMIN_URL_API_KEY}
+      - CONTROLLER_POSTGRESQL_HOST=${CONTROLLER_POSTGRESQL_HOST}
+      - CONTROLLER_POSTGRESQL_PORT=${CONTROLLER_POSTGRESQL_PORT}
+      - CONTROLLER_POSTGRESQL_DB=${CONTROLLER_POSTGRESQL_DB}
+      - CONTROLLER_POSTGRESQL_USER=${CONTROLLER_POSTGRESQL_USER}
+      - CONTROLLER_POSTGRESQL_PASSWORD=${CONTROLLER_POSTGRESQL_PASSWORD}
+      - CONTROLLER_POSTGRESQL_ADMIN_USER=${CONTROLLER_POSTGRESQL_ADMIN_USER}
+      - CONTROLLER_POSTGRESQL_ADMIN_PASSWORD=${CONTROLLER_POSTGRESQL_ADMIN_PASSWORD}
+      - ENDORSER_API_ADMIN_USER=${ENDORSER_API_ADMIN_USER}
+      - ENDORSER_API_ADMIN_KEY=${ENDORSER_API_ADMIN_KEY}
+      - ACAPY_ADMIN_URL=${ENDORSER_ACAPY_ADMIN_URL}
+      - ACAPY_API_ADMIN_KEY=${ACAPY_API_ADMIN_KEY}
+      - ENDORSER_ENV=${ENDORSER_ENV}
+      - ENDORSER_AUTO_ACCEPT_CONNECTIONS=${ENDORSER_AUTO_ACCEPT_CONNECTIONS}
+      - ENDORSER_AUTO_ACCEPT_AUTHORS=${ENDORSER_AUTO_ACCEPT_AUTHORS}
+      - ENDORSER_AUTO_ENDORSE_REQUESTS=${ENDORSER_AUTO_ENDORSE_REQUESTS}
+      - ENDORSER_REJECT_BY_DEFAULT=${ENDORSER_REJECT_BY_DEFAULT}
+      - ENDORSER_AUTO_ENDORSE_TXN_TYPES=${ENDORSER_AUTO_ENDORSE_TXN_TYPES}
+      - WEB_CONCURRENCY=${WEB_CONCURRENCY}
+      - ACAPY_WEBHOOK_URL_API_KEY=${ACAPY_WEBHOOK_URL_API_KEY}
+      - LOG_LEVEL=${API_LOG_LEVEL}
+      - ENDORSER_PUBLIC_NAME=${ENDORSER_PUBLIC_NAME}
+      - ENDORSER_PUBLIC_DESC=${ENDORSER_PUBLIC_DESC}
+      - DEBUGGER=${DEBUGGER:-false}
+      - SQLALCHEMY_WARN_20=1
+    volumes:
+      - ../endorser:/app:rw
+    ports:
+      - ${ENDORSER_SERVICE_PORT_EXPOSED}:${ENDORSER_SERVICE_PORT}
+      - 5678:5678
+    extra_hosts:
+      - host.docker.internal:host-gateway
+
+  webvh-endorser-db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=${POSTGRESQL_USER}
+      - POSTGRES_PASSWORD=${POSTGRESQL_PASSWORD}
+      - CONTROLLER_POSTGRESQL_DB=${CONTROLLER_POSTGRESQL_DB}
+      - CONTROLLER_POSTGRESQL_USER=${CONTROLLER_POSTGRESQL_USER}
+      - CONTROLLER_POSTGRESQL_PASSWORD=${CONTROLLER_POSTGRESQL_PASSWORD}
+      - CONTROLLER_POSTGRESQL_ADMIN_USER=${CONTROLLER_POSTGRESQL_ADMIN_USER}
+      - CONTROLLER_POSTGRESQL_ADMIN_PASSWORD=${CONTROLLER_POSTGRESQL_ADMIN_PASSWORD}
+    ports:
+      - ${CONTROLLER_POSTGRESQL_PORT_EXPOSED}:${CONTROLLER_POSTGRESQL_PORT}
+    volumes:
+      # - webvh-endorser-db:/var/lib/postgresql/data
+      - ./database/1-init.sh:/docker-entrypoint-initdb.d/1-init.sh
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+# volumes:
+#   webvh-endorser-db:

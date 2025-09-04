@@ -297,6 +297,12 @@ LEDGER_URL=http://localhost:9000 TAILS_SERVER_URL=http://localhost:6543 ./manage
 LEDGER_URL=http://localhost:9000 TAILS_SERVER_URL=http://localhost:6543 ./manage run-bdd -t @DIDs-006
 ```
 
+For the WebVH tests, define the webvh server url:
+
+```bash
+WEBVH_SERVER_URL=https://sandbox.bcvh.vonx.io ./manage run-bdd -t @Witnessing-001
+```
+
 To enter the poetry environment you can make use of [devcontainers](https://containers.dev/)  or simply run `poetry shell`
 
 Note that because these tests run on your local (rather than in a docker container) you need to specify the _local_ URL to the ledger and tails servers.
