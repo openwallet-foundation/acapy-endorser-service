@@ -78,7 +78,7 @@ exportEnvironment() {
 
   # endorser aca-py agent
   # export LEDGER_URL=${LEDGER_URL-http://test.bcovrin.vonx.io}
-  export WEBVH_SERVER_URL=${WEBVH_SERVER_URL-https://example.com}
+  export WEBVH_SERVER_URL=${WEBVH_SERVER_URL-https://sandbox.bcvh.vonx.io}
   export LEDGER_URL=${LEDGER_URL-http://${DOCKERHOST}:9000}
   export GENESIS_URL=${GENESIS_URL-${LEDGER_URL}/genesis}
   export TAILS_SERVER_URL=${TAILS_SERVER_URL-http://${DOCKERHOST}:6543}
