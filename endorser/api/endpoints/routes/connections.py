@@ -24,10 +24,11 @@ from api.services.connections import (
     update_connection_info,
 )
 from api.acapy_utils import acapy_POST
+from api.endpoints.dependencies.jwt_security import check_access_token
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter()
+router = APIRouter(tags=["connections"], dependencies=[Depends(check_access_token)])
 
 
 @router.get("/", response_model=ConnectionList)

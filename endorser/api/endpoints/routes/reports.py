@@ -2,13 +2,14 @@
 
 import logging
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from starlette import status
+from api.endpoints.dependencies.jwt_security import check_access_token
 
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter()
+router = APIRouter(tags=["reports"], dependencies=[Depends(check_access_token)])
 
 
 @router.get("/summary", status_code=status.HTTP_200_OK, response_model=dict)

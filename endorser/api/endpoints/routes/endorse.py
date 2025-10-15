@@ -26,9 +26,10 @@ from api.services.endorse import (
     reject_transaction,
 )
 from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
+from api.endpoints.dependencies.jwt_security import check_access_token
 
 
-router = APIRouter()
+router = APIRouter(tags=["endorse"], dependencies=[Depends(check_access_token)])
 logger = logging.getLogger(__name__)
 
 

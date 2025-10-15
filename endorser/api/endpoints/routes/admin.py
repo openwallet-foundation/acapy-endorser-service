@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from api.endpoints.dependencies.db import get_db
+from api.endpoints.dependencies.jwt_security import check_access_token
 from api.endpoints.models.configurations import ConfigurationType
 from api.services.admin import (
     get_endorser_configs,
@@ -22,7 +23,7 @@ from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter()
+router = APIRouter(tags=["admin"], dependencies=[Depends(check_access_token)])
 
 
 @router.get("/config", status_code=status.HTTP_200_OK, response_model=dict)
@@ -30,6 +31,8 @@ async def get_config(
     db: AsyncSession = Depends(get_db),
 ) -> dict:
     """Retrieve endorser configurations with optional sorting and paging.
+
+    Note: JWT token validation is handled at the router level.
 
     Args:
         db (AsyncSession): Database session dependency.

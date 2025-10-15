@@ -15,13 +15,13 @@ import logging
 import traceback
 from enum import Enum
 
-from fastapi import APIRouter, Depends, FastAPI, HTTPException, Security
+from fastapi import APIRouter, Depends, HTTPException, Security
 from fastapi.security.api_key import APIKey, APIKeyHeader
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.status import HTTP_403_FORBIDDEN
 
 import api.services as api_services
-from api.core.config import settings
+from api.config import settings
 from api.endpoints.dependencies.db import get_db
 from api.endpoints.models.connections import Connection
 from api.endpoints.models.endorse import EndorseTransaction
@@ -29,7 +29,7 @@ from api.endpoints.models.endorse import EndorseTransaction
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter()
+router = APIRouter(tags=["webhooks"])
 
 api_key_header = APIKeyHeader(
     name=settings.ACAPY_WEBHOOK_URL_API_KEY_NAME, auto_error=False
@@ -70,26 +70,6 @@ async def get_api_key(
         raise HTTPException(
             status_code=HTTP_403_FORBIDDEN, detail="Could not validate credentials"
         )
-
-
-def get_webhookapp() -> FastAPI:
-    """Create and return a FastAPI application for handling webhooks.
-
-    The application is configured with the specified title, description, debug
-    settings, and middleware. It includes a router for managing webhook-related
-    endpoints.
-
-    Returns:
-        FastAPI: A configured FastAPI application instance.
-    """
-    application = FastAPI(
-        title="WebHooks",
-        description="Endpoints for Aca-Py WebHooks",
-        debug=settings.DEBUG,
-        middleware=None,
-    )
-    application.include_router(router, prefix="")
-    return application
 
 
 @router.post("/topic/{topic}/", response_model=dict | Connection | EndorseTransaction)

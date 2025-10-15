@@ -23,7 +23,7 @@ from aiohttp import (
 )
 import json
 
-from api.core.config import settings
+from api.config import settings
 
 
 def get_acapy_headers(headers=None, tenant=False) -> dict:

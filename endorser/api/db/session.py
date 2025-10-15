@@ -8,7 +8,7 @@ supports database connection pooling and echoing of SQL statements for debugging
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
-from api.core.config import settings
+from api.config import settings
 
 engine = create_async_engine(
     settings.SQLALCHEMY_DATABASE_URI,
