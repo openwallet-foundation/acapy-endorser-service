@@ -45,7 +45,7 @@ def create_access_token(data: dict):
 
 
 # OAuth2 scheme for token extraction
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/endorser/token")
 
 
 def check_access_token(token: str = Depends(oauth2_scheme)) -> dict:
@@ -68,6 +68,7 @@ def check_access_token(token: str = Depends(oauth2_scheme)) -> dict:
         HTTPException: If token is invalid, expired, missing required claims,
                       or subject doesn't match configured admin user
     """
+
     try:
         # Decode the token
         payload = jwt.decode(
