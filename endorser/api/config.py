@@ -24,7 +24,6 @@ Functions:
 
 import logging
 import os
-import secrets
 from enum import Enum
 from functools import lru_cache
 from typing import Optional
@@ -183,7 +182,7 @@ class GlobalConfig(BaseSettings):
     API_V1_STR: str = "/v1"
 
     # Generate a secure JWT secret key if not provided via environment
-    JWT_SECRET_KEY: str = os.environ.get("JWT_SECRET_KEY", secrets.token_hex(32))
+    JWT_SECRET_KEY: str = os.environ.get("JWT_SECRET_KEY", "change-me")
     JWT_ALGORITHM: str = "HS256"
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 300
     model_config = SettingsConfigDict(case_sensitive=True)
