@@ -184,7 +184,7 @@ class GlobalConfig(BaseSettings):
     # Generate a secure JWT secret key if not provided via environment
     JWT_SECRET_KEY: str = os.environ.get("JWT_SECRET_KEY", "change-me")
     JWT_ALGORITHM: str = "HS256"
-    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 300
+    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = os.environ.get("JWT_ACCESS_TOKEN_EXPIRE_MINUTES", 300)
     model_config = SettingsConfigDict(case_sensitive=True)
 
 
