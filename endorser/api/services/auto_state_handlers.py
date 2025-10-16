@@ -55,7 +55,7 @@ from api.services.endorse import (
     reject_transaction,
 )
 from api.services.witness import (
-    witness_request,
+    approve_request,
     reject_request,
 )
 
@@ -571,13 +571,13 @@ async def auto_step_log_entry_pending(
                 ">>> from auto_step_log_entry_pending:\
                 this was allowed"
             )
-            handler_result = await witness_request(db, handler_result)
+            handler_result = await approve_request(db, handler_result)
         elif await can_witness(db, handler_result):
             logger.debug(
                 f">>> from auto_step_log_entry_pending:\
                 {handler_result} was allowed"
             )
-            handler_result = await witness_request(db, handler_result)
+            handler_result = await approve_request(db, handler_result)
         # If we could not auto endorse check if we should reject it or leave it pending
         elif await get_bool_config(db, "ENDORSER_REJECT_BY_DEFAULT"):
             handler_result = await reject_request(db, handler_result)
@@ -603,13 +603,13 @@ async def auto_step_attested_resource_pending(
                 ">>> from auto_step_attested_resource_pending:\
                 this was allowed"
             )
-            handler_result = await witness_request(db, handler_result)
+            handler_result = await approve_request(db, handler_result)
         elif await can_witness(db, handler_result):
             logger.debug(
                 f">>> from auto_step_attested_resource_pending:\
                 {handler_result} was allowed"
             )
-            handler_result = await witness_request(db, handler_result)
+            handler_result = await approve_request(db, handler_result)
         # If we could not auto endorse check if we should reject it or leave it pending
         elif await get_bool_config(db, "ENDORSER_REJECT_BY_DEFAULT"):
             handler_result = await reject_request(db, handler_result)

@@ -8,7 +8,7 @@ from alembic import context
 
 sys.path = ["", ".."] + sys.path[1:]  # TODO: Fix it
 
-from api.core.config import settings  # noqa
+from api.config import settings  # noqa
 from api.db.models import BaseTable  # noqa
 
 config = context.config

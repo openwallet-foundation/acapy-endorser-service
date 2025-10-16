@@ -128,6 +128,7 @@ exportEnvironment() {
   export ENDORSER_WEBHOOK_URL="http://${ENDORSER_SERVICE_HOST}:${ENDORSER_SERVICE_PORT}/webhook#${ACAPY_WEBHOOK_URL_API_KEY}"
   export ENDORSER_API_ADMIN_USER=endorser-admin
   export ENDORSER_API_ADMIN_KEY=change-me
+  export ENDORSER_JWT_SECRET_KEY=change-me
 
   # endorser api db
   export POSTGRESQL_USER=postgres

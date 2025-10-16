@@ -85,9 +85,9 @@ async def update_witnessing_status(db: AsyncSession, request: WitnessRequest):
     return request
 
 
-async def witness_request(db: AsyncSession, request: WitnessRequest):
-    """Witness a request and update its status."""
-    logger.info(f">>> called witness_request with: {request.record_id}")
+async def approve_request(db: AsyncSession, request: WitnessRequest):
+    """Approve a witness request and update its status."""
+    logger.info(f">>> called approve_request with: {request.record_id}")
 
     # fetch existing db object
     db_record: WitnessRequestDbRecord = await db_fetch_db_txn_record(
@@ -113,13 +113,13 @@ async def witness_request(db: AsyncSession, request: WitnessRequest):
     # update local db state
     db_record.state = "witnessed"
     db_record = await db_update_db_txn_record(db, db_record)
-    logger.info(f">>> witnessed witness_request for {db_record.record_id}")
+    logger.info(f">>> approved witness request for {db_record.record_id}")
 
     return db_record
 
 
 async def reject_request(db: AsyncSession, request: WitnessRequest):
-    """Reject a transaction and update its status."""
+    """Reject a witness request and update its status."""
     logger.info(f">>> called reject_request with: {request.record_id}")
 
     # fetch existing db object
@@ -146,6 +146,6 @@ async def reject_request(db: AsyncSession, request: WitnessRequest):
     # update local db state
     db_record.state = "rejected"
     db_record = await db_update_db_txn_record(db, db_record)
-    logger.info(f">>> rejected witness_request for {request.record_id}")
+    logger.info(f">>> rejected witness request for {request.record_id}")
 
     return db_record
