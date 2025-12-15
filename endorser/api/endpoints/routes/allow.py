@@ -95,16 +95,20 @@ async def select_from_table(
 )
 async def set_config(
     log_entry: Annotated[
-        UploadFile, File(description="List of log entries authorized to be published")
+        Optional[UploadFile],
+        File(description="List of log entries authorized to be published"),
     ] = None,
     publish_did: Annotated[
-        UploadFile, File(description="List of DIDs authorized to become public")
+        Optional[UploadFile],
+        File(description="List of DIDs authorized to become public"),
     ] = None,
     schema: Annotated[
-        UploadFile, File(description="List of schemas authorized to be published")
+        Optional[UploadFile],
+        File(description="List of schemas authorized to be published"),
     ] = None,
     credential_definition: Annotated[
-        UploadFile, File(description="List of creddefs authorized to be published")
+        Optional[UploadFile],
+        File(description="List of creddefs authorized to be published"),
     ] = None,
     db: AsyncSession = Depends(get_db),
 ) -> dict:
@@ -125,16 +129,19 @@ async def set_config(
 )
 async def append_config(
     log_entry: Annotated[
-        UploadFile, File(description="List of log entries authorized to be published")
+        Optional[UploadFile],
+        File(description="List of log entries authorized to be published"),
     ] = None,
     publish_did: Annotated[
-        UploadFile, File(description="List of DIDs authorized to become public")
+        Optional[UploadFile],
+        File(description="List of DIDs authorized to become public"),
     ] = None,
     schema: Annotated[
-        UploadFile, File(description="List of schemas authorized to be published")
+        Optional[UploadFile],
+        File(description="List of schemas authorized to be published"),
     ] = None,
     credential_definition: Annotated[
-        UploadFile, File(description="List of authorized creddefs")
+        Optional[UploadFile], File(description="List of authorized creddefs")
     ] = None,
     db: AsyncSession = Depends(get_db),
 ) -> dict:
@@ -490,7 +497,12 @@ async def update_full_config(
         (schema, AllowedSchema),
         (credential_definition, AllowedCredentialDefinition),
     ]
-    provided_configs = [(file, model) for file, model in provided_configs if file]
+    # Filter out None values and files with empty filenames (empty form fields)
+    provided_configs = [
+        (file, model)
+        for file, model in provided_configs
+        if file is not None and file.filename
+    ]
 
     if not provided_configs:
         raise HTTPException(
