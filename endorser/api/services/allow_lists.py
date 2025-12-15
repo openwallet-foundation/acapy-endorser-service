@@ -2,20 +2,21 @@
 
 import logging
 from typing import TypeVar
-from api.db.models.base import BaseModel
-from sqlalchemy.exc import IntegrityError
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
+
 from psycopg2.errors import UniqueViolation
+from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from api.db.errors import AlreadyExists
+from api.db.models.base import BaseModel
+from api.db.models.endorse_request import EndorseRequest
 from api.endpoints.models.endorse import (
     EndorseTransactionState,
     db_to_txn_object,
 )
-from api.db.models.endorse_request import EndorseRequest
 from api.services.auto_state_handlers import is_endorsable_transaction
 from api.services.endorse import endorse_transaction
-from api.db.errors import AlreadyExists
-
 
 logger = logging.getLogger(__name__)
 
@@ -40,6 +41,7 @@ async def updated_allowed(db: AsyncSession) -> None:
                     f">>> from updated_allowed: endorsing transaction: {transaction}"
                 )
                 await endorse_transaction(db, transaction)
+        await db.commit()
     except Exception as e:
         logger.error(f"Failed to update pending transactions {e}")
 
