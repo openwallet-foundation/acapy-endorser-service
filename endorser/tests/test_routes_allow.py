@@ -310,3 +310,37 @@ async def test_update_full_config_mixed_files():
     assert "AllowedPublicDid" not in result
     assert "AllowedSchema" not in result
     assert db.execute.call_count == 2
+
+
+@pytest.mark.asyncio
+async def test_update_full_config_rolls_back_on_error():
+    """Test that update_full_config rolls back transaction if processing fails."""
+    # Arrange
+    db = AsyncMock(spec=AsyncSession)
+    csv_content = "registered_did,details\ndid:example:123,test"
+    publish_did_file = create_mock_upload_file("publish_did.csv", csv_content)
+
+    # Act & Assert
+    with patch(
+        "api.endpoints.routes.allow.update_allowed_config"
+    ) as mock_update, patch(
+        "api.endpoints.routes.allow.updated_allowed"
+    ) as mock_updated:
+
+        # Make update_allowed_config fail
+        mock_update.side_effect = Exception("Processing failed")
+
+        with pytest.raises(Exception) as exc_info:
+            await update_full_config(
+                log_entry=None,
+                publish_did=publish_did_file,
+                schema=None,
+                credential_definition=None,
+                db=db,
+                delete_contents=True,
+            )
+
+        assert "Processing failed" in str(exc_info.value)
+        db.rollback.assert_called_once()
+        db.commit.assert_not_called()
+        mock_updated.assert_not_called()  # Should not reprocess if commit failed

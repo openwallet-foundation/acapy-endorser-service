@@ -510,13 +510,22 @@ async def update_full_config(
             detail="At least one configuration file must be provided.",
         )
 
-    modifications: dict[str, dict] = {}
-    for file_obj, model in provided_configs:
-        if delete_contents:
-            await db.execute(delete(model))
-        modifications[model.__name__] = await update_allowed_config(file_obj, model, db)
+    try:
+        modifications: dict[str, dict] = {}
+        for file_obj, model in provided_configs:
+            if delete_contents:
+                await db.execute(delete(model))
+            modifications[model.__name__] = await update_allowed_config(
+                file_obj, model, db
+            )
 
-    await db.commit()
+        await db.commit()
+    except Exception:
+        await db.rollback()
+        raise
+
+    # Reprocess pending transactions after successful commit
+    # This runs outside the transaction since it does its own commit
     await updated_allowed(db)
     return modifications
 
