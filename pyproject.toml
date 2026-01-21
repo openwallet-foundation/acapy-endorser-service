@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "acapy_endorser_service"
-version = "0.0.1"
+version = "1.1.1"
 description = "ACA-Py Endorser Service is a controller for a Python Cloud Agent acting as endorser."
 authors = ["OpenWallet Foundation"]
 license = "Apache-2.0"
