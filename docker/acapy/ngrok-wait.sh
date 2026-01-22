@@ -54,4 +54,4 @@ exec aca-py start \
     --endorser-protocol-role endorser \
     --log-level "${LOG_LEVEL}" \
     --plugin webvh \
-    --plugin-config-value "did-webvh.server_url=${WEBVH_SERVER_URL}"
+    --plugin-config-value "webvh.server_url=${WEBVH_SERVER_URL}"

@@ -45,12 +45,10 @@ async def test_update_full_config_single_file_replace():
     publish_did_file = create_mock_upload_file("publish_did.csv", csv_content)
 
     # Act
-    with patch(
-        "api.endpoints.routes.allow.update_allowed_config"
-    ) as mock_update, patch(
-        "api.endpoints.routes.allow.updated_allowed"
-    ) as mock_updated:
-
+    with (
+        patch("api.endpoints.routes.allow.update_allowed_config") as mock_update,
+        patch("api.endpoints.routes.allow.updated_allowed") as mock_updated,
+    ):
         mock_update.return_value = {"added": 1}
 
         result = await update_full_config(
@@ -85,12 +83,10 @@ async def test_update_full_config_multiple_files_replace():
     schema_file = create_mock_upload_file("schema.csv", schema_content)
 
     # Act
-    with patch(
-        "api.endpoints.routes.allow.update_allowed_config"
-    ) as mock_update, patch(
-        "api.endpoints.routes.allow.updated_allowed"
-    ) as mock_updated:
-
+    with (
+        patch("api.endpoints.routes.allow.update_allowed_config") as mock_update,
+        patch("api.endpoints.routes.allow.updated_allowed") as mock_updated,
+    ):
         mock_update.side_effect = [{"added": 1}, {"added": 1}]
 
         result = await update_full_config(
@@ -120,12 +116,10 @@ async def test_update_full_config_single_file_append():
     schema_file = create_mock_upload_file("schema.csv", csv_content)
 
     # Act
-    with patch(
-        "api.endpoints.routes.allow.update_allowed_config"
-    ) as mock_update, patch(
-        "api.endpoints.routes.allow.updated_allowed"
-    ) as mock_updated:
-
+    with (
+        patch("api.endpoints.routes.allow.update_allowed_config") as mock_update,
+        patch("api.endpoints.routes.allow.updated_allowed") as mock_updated,
+    ):
         mock_update.return_value = {"added": 1}
 
         result = await update_full_config(
@@ -166,12 +160,10 @@ async def test_update_full_config_all_files_replace():
     creddef_file = create_mock_upload_file("creddef.csv", creddef_content)
 
     # Act
-    with patch(
-        "api.endpoints.routes.allow.update_allowed_config"
-    ) as mock_update, patch(
-        "api.endpoints.routes.allow.updated_allowed"
-    ) as mock_updated:
-
+    with (
+        patch("api.endpoints.routes.allow.update_allowed_config") as mock_update,
+        patch("api.endpoints.routes.allow.updated_allowed") as mock_updated,
+    ):
         mock_update.side_effect = [
             {"added": 1},
             {"added": 1},
@@ -209,12 +201,10 @@ async def test_update_full_config_calls_updated_allowed():
     publish_did_file = create_mock_upload_file("publish_did.csv", csv_content)
 
     # Act
-    with patch(
-        "api.endpoints.routes.allow.update_allowed_config"
-    ) as mock_update, patch(
-        "api.endpoints.routes.allow.updated_allowed"
-    ) as mock_updated:
-
+    with (
+        patch("api.endpoints.routes.allow.update_allowed_config") as mock_update,
+        patch("api.endpoints.routes.allow.updated_allowed") as mock_updated,
+    ):
         mock_update.return_value = {"added": 1}
 
         await update_full_config(
@@ -249,12 +239,10 @@ async def test_update_full_config_only_deletes_provided_tables():
     schema_file = create_mock_upload_file("schema.csv", schema_content)
 
     # Act
-    with patch(
-        "api.endpoints.routes.allow.update_allowed_config"
-    ) as mock_update, patch(
-        "api.endpoints.routes.allow.updated_allowed"
-    ) as mock_updated:
-
+    with (
+        patch("api.endpoints.routes.allow.update_allowed_config") as mock_update,
+        patch("api.endpoints.routes.allow.updated_allowed") as mock_updated,
+    ):
         mock_update.return_value = {"added": 1}
 
         await update_full_config(
@@ -286,12 +274,10 @@ async def test_update_full_config_mixed_files():
     creddef_file = create_mock_upload_file("creddef.csv", creddef_content)
 
     # Act
-    with patch(
-        "api.endpoints.routes.allow.update_allowed_config"
-    ) as mock_update, patch(
-        "api.endpoints.routes.allow.updated_allowed"
-    ) as mock_updated:
-
+    with (
+        patch("api.endpoints.routes.allow.update_allowed_config") as mock_update,
+        patch("api.endpoints.routes.allow.updated_allowed") as mock_updated,
+    ):
         mock_update.side_effect = [{"added": 1}, {"added": 1}]
 
         result = await update_full_config(
@@ -321,12 +307,10 @@ async def test_update_full_config_rolls_back_on_error():
     publish_did_file = create_mock_upload_file("publish_did.csv", csv_content)
 
     # Act & Assert
-    with patch(
-        "api.endpoints.routes.allow.update_allowed_config"
-    ) as mock_update, patch(
-        "api.endpoints.routes.allow.updated_allowed"
-    ) as mock_updated:
-
+    with (
+        patch("api.endpoints.routes.allow.update_allowed_config") as mock_update,
+        patch("api.endpoints.routes.allow.updated_allowed") as mock_updated,
+    ):
         # Make update_allowed_config fail
         mock_update.side_effect = Exception("Processing failed")
 

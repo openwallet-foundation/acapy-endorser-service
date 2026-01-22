@@ -320,4 +320,4 @@ configs:
   webvh-plugin.yml:
     content: |
       plugin-config-value:
-        - did-webvh.server_url=${WEBVH_SERVER_URL}
+        - webvh.server_url=${WEBVH_SERVER_URL}

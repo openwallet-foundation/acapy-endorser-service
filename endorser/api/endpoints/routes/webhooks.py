@@ -42,6 +42,7 @@ class WebhookTopicType(str, Enum):
     ping = "ping"
     connections = "connections"
     oob_invitation = "oob-invitation"
+    out_of_band = "out_of_band"
     connection_reuse = "connection-reuse"
     connection_reuse_accepted = "connection-reuse-accepted"
     basicmessages = "basicmessages"
@@ -80,6 +81,12 @@ async def process_webhook(
     db: AsyncSession = Depends(get_db),
 ):
     """Called by aca-py agent."""
+    if topic == WebhookTopicType.out_of_band:
+        oob_id = payload.get('oob_id')
+        logger.info(
+            f">>> Called webhook for endorser: {topic.name} / {oob_id}"
+        )
+        return {}
     state = payload.get("state")
     if state:
         logger.info(f">>> Called webhook for endorser: {topic.name} / {state}")

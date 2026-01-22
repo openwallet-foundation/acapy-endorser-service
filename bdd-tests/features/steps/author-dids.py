@@ -1,34 +1,22 @@
-import json
-import time
 import os
 import pprint
-import random
-import time
 
 from behave import *
-from starlette import status
 
 from util import (
-    authenticate_endorser_service,
     call_endorser_service,
-    call_agency_service,
     call_author_service,
     call_http_service,
-    set_endorser_config,
     get_endorsers_author_connection,
-    get_authors_endorser_connection,
     get_endorser_transaction_record,
     get_author_transaction_record,
     GET,
     POST,
-    HEAD,
     ENDORSER_URL_PREFIX,
     get_author_context,
     put_author_context,
-    clear_author_context,
     get_endorser_context,
     put_endorser_context,
-    clear_endorser_context,
 )
 
 
@@ -200,7 +188,7 @@ def step_impl(context, author: str):
         context,
         author,
         GET,
-        f"/wallet/did/public",
+        "/wallet/did/public",
     )
     public_did = resp["result"]
     assert public_did["did"], pprint.pp(public_did)

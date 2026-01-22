@@ -241,12 +241,10 @@ async def test_is_endorsable_transaction_cred_def():
     # Format: did:placeholder:TestSchema:1.0
     mock_schema_response = {"schema": {"id": "did:placeholder:TestSchema:1.0"}}
 
-    with patch(
-        "api.services.auto_state_handlers.allowed_creddef"
-    ) as mock_allowed, patch(
-        "api.services.auto_state_handlers.au.acapy_GET"
-    ) as mock_acapy:
-
+    with (
+        patch("api.services.auto_state_handlers.allowed_creddef") as mock_allowed,
+        patch("api.services.auto_state_handlers.au.acapy_GET") as mock_acapy,
+    ):
         mock_allowed.return_value = True
         mock_acapy.return_value = mock_schema_response
 

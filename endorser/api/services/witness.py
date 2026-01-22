@@ -99,14 +99,14 @@ async def approve_request(db: AsyncSession, request: WitnessRequest):
         cast(
             dict,
             await au.acapy_POST(
-                f"did/webvh/witness/log-entries?record_id={request.record_id}"
+                f"did/webvh/witness-requests/log-entry/{request.record_id}"
             ),
         )
     elif request.record_type == "attested-resource":
         cast(
             dict,
             await au.acapy_POST(
-                f"did/webvh/witness/attested-resources?record_id={request.record_id}"
+                f"did/webvh/witness-requests/attested-resource/{request.record_id}"
             ),
         )
 
@@ -132,14 +132,14 @@ async def reject_request(db: AsyncSession, request: WitnessRequest):
         cast(
             dict,
             await au.acapy_DELETE(
-                f"did/webvh/witness/log-entries?record_id={request.record_id}"
+                f"did/webvh/witness-requests/log-entry/{request.record_id}"
             ),
         )
     elif request.record_type == "attested-resource":
         cast(
             dict,
             await au.acapy_DELETE(
-                f"did/webvh/witness/attested-resources?record_id={request.record_id}"
+                f"did/webvh/witness-requests/attested-resource/{request.record_id}"
             ),
         )
 

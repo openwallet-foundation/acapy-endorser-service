@@ -1,12 +1,9 @@
-import json
 import time
 import os
 import pprint
 import random
-import time
 
 from behave import *
-from starlette import status
 
 from util import (
     authenticate_endorser_service,
@@ -20,14 +17,12 @@ from util import (
     get_authors_endorser_connection,
     GET,
     POST,
-    HEAD,
     ENDORSER_URL_PREFIX,
     get_author_context,
     put_author_context,
     clear_author_context,
     get_endorser_context,
     put_endorser_context,
-    clear_endorser_context,
 )
 
 MAX_INC = 10

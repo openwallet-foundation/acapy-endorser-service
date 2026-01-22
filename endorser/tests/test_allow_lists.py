@@ -19,11 +19,10 @@ async def test_updated_allowed_no_pending_transactions():
     db.execute.return_value = result_mock
 
     # Act
-    with patch(
-        "api.services.allow_lists.is_endorsable_transaction"
-    ) as mock_is_endorsable, patch(
-        "api.services.allow_lists.endorse_transaction"
-    ) as mock_endorse:
+    with (
+        patch("api.services.allow_lists.is_endorsable_transaction") as mock_is_endorsable,
+        patch("api.services.allow_lists.endorse_transaction") as mock_endorse,
+    ):
         await updated_allowed(db)
 
     # Assert
@@ -57,14 +56,11 @@ async def test_updated_allowed_with_endorsable_transactions():
     db.execute.return_value = result_mock
 
     # Act
-    with patch(
-        "api.services.allow_lists.is_endorsable_transaction"
-    ) as mock_is_endorsable, patch(
-        "api.services.allow_lists.endorse_transaction"
-    ) as mock_endorse, patch(
-        "api.services.allow_lists.db_to_txn_object"
-    ) as mock_db_to_txn:
-
+    with (
+        patch("api.services.allow_lists.is_endorsable_transaction") as mock_is_endorsable,
+        patch("api.services.allow_lists.endorse_transaction") as mock_endorse,
+        patch("api.services.allow_lists.db_to_txn_object") as mock_db_to_txn,
+    ):
         # Mock first transaction is endorsable, second is not
         mock_is_endorsable.side_effect = [True, False]
         mock_txn_obj1 = MagicMock()
@@ -95,14 +91,11 @@ async def test_updated_allowed_with_no_endorsable_transactions():
     db.execute.return_value = result_mock
 
     # Act
-    with patch(
-        "api.services.allow_lists.is_endorsable_transaction"
-    ) as mock_is_endorsable, patch(
-        "api.services.allow_lists.endorse_transaction"
-    ) as mock_endorse, patch(
-        "api.services.allow_lists.db_to_txn_object"
-    ) as mock_db_to_txn:
-
+    with (
+        patch("api.services.allow_lists.is_endorsable_transaction") as mock_is_endorsable,
+        patch("api.services.allow_lists.endorse_transaction") as mock_endorse,
+        patch("api.services.allow_lists.db_to_txn_object") as mock_db_to_txn,
+    ):
         mock_is_endorsable.return_value = False
         mock_db_to_txn.return_value = MagicMock()
 
@@ -132,14 +125,11 @@ async def test_updated_allowed_commits_after_endorsements():
     db.execute.return_value = result_mock
 
     # Act
-    with patch(
-        "api.services.allow_lists.is_endorsable_transaction"
-    ) as mock_is_endorsable, patch(
-        "api.services.allow_lists.endorse_transaction"
-    ) as mock_endorse, patch(
-        "api.services.allow_lists.db_to_txn_object"
-    ) as mock_db_to_txn:
-
+    with (
+        patch("api.services.allow_lists.is_endorsable_transaction") as mock_is_endorsable,
+        patch("api.services.allow_lists.endorse_transaction") as mock_endorse,
+        patch("api.services.allow_lists.db_to_txn_object") as mock_db_to_txn,
+    ):
         mock_is_endorsable.side_effect = [True, True]
         mock_txn_obj1 = MagicMock()
         mock_txn_obj2 = MagicMock()

@@ -1,32 +1,19 @@
 """WebVH Witnessing tests."""
-import random
 import uuid
 import time
-import pprint
 from behave import (
     when, given, then
 )
 from util import (
     GET,
     POST,
-    WEBVH_SERVER_URL,
-    AGENCY_BASE_URL,
-    ENDORSER_BASE_URL,
-    ENDORSER_URL_PREFIX,
     ENDORSER_ACAPY_ADMIN_URL,
-    AUTHOR_ACAPY_ADMIN_URL,
     call_http_service,
     call_author_service,
-    call_agency_service,
-    call_endorser_service,
-    agency_headers,
-    endorser_headers,
     endorser_agent_headers,
     put_author_context,
-    get_author_context,
     put_endorser_context,
-    get_endorser_context,
-    set_endorser_config
+    get_endorser_context
 )
 
 @given("the witness plugin is configured")
@@ -119,7 +106,6 @@ def step_impl(context, author: str):
             'method': 'webvh'
         }
     ).get('results', []))
-    print(results)
     assert (did := next(iter(results), {}).get('did', None))
     assert (scid := did.split(':')[2])
     assert did.split(':')[-1] == context.config.userdata[f"{author}_config"]["identifier"]
