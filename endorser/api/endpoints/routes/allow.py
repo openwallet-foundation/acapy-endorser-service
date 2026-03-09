@@ -77,7 +77,7 @@ async def select_from_table(
         cond == value if value else True for value, cond in filters.items()
     ]
     base_q = select(table).filter(*filter_conditions)
-    count_q = base_q.with_only_columns(func.count()).order_by(None)
+    count_q = select(func.count()).select_from(base_q.subquery())
     q = base_q.limit(page_size).offset(skip)
     count_result = await db.execute(count_q)
     total_count: int = count_result.scalar() or 0
