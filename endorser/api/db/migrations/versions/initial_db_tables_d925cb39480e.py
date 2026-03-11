@@ -7,7 +7,6 @@ Create Date: 2022-05-05 11:45:18.781171
 """
 from alembic import op
 import sqlalchemy as sa
-import sqlmodel
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
@@ -40,18 +39,18 @@ def upgrade():
             server_default=sa.text("now()"),
             nullable=False,
         ),
-        sa.Column("author_status", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column("endorse_status", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column("connection_id", sqlmodel.sql.sqltypes.GUID(), nullable=False),
+        sa.Column("author_status", sa.String(), nullable=False),
+        sa.Column("endorse_status", sa.String(), nullable=False),
+        sa.Column("connection_id", sa.Uuid(), nullable=False),
         sa.Column(
-            "connection_protocol", sqlmodel.sql.sqltypes.AutoString(), nullable=False
+            "connection_protocol", sa.String(), nullable=False
         ),
         sa.Column(
-            "connection_alias", sqlmodel.sql.sqltypes.AutoString(), nullable=True
+            "connection_alias", sa.String(), nullable=True
         ),
-        sa.Column("public_did", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-        sa.Column("state", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column("their_label", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+        sa.Column("public_did", sa.String(), nullable=True),
+        sa.Column("state", sa.String(), nullable=False),
+        sa.Column("their_label", sa.String(), nullable=False),
         sa.PrimaryKeyConstraint("contact_id"),
     )
     op.create_table(
@@ -75,15 +74,15 @@ def upgrade():
             server_default=sa.text("now()"),
             nullable=False,
         ),
-        sa.Column("transaction_id", sqlmodel.sql.sqltypes.GUID(), nullable=False),
-        sa.Column("connection_id", sqlmodel.sql.sqltypes.GUID(), nullable=False),
-        sa.Column("endorser_did", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column("author_did", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+        sa.Column("transaction_id", sa.Uuid(), nullable=False),
+        sa.Column("connection_id", sa.Uuid(), nullable=False),
+        sa.Column("endorser_did", sa.String(), nullable=False),
+        sa.Column("author_did", sa.String(), nullable=True),
         sa.Column(
-            "transaction_type", sqlmodel.sql.sqltypes.AutoString(), nullable=True
+            "transaction_type", sa.String(), nullable=True
         ),
-        sa.Column("state", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
-        sa.Column("ledger_txn", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
+        sa.Column("state", sa.String(), nullable=True),
+        sa.Column("ledger_txn", sa.String(), nullable=True),
         sa.PrimaryKeyConstraint("endorse_request_id"),
     )
     op.create_table(
@@ -106,8 +105,8 @@ def upgrade():
             server_default=sa.text("now()"),
             nullable=False,
         ),
-        sa.Column("config_name", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column("config_value", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+        sa.Column("config_name", sa.String(), nullable=False),
+        sa.Column("config_value", sa.String(), nullable=False),
         sa.PrimaryKeyConstraint("config_id"),
     )
     # ### end Alembic commands ###

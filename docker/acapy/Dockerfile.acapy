@@ -1,10 +1,10 @@
-FROM ghcr.io/openwallet-foundation/acapy-agent:py3.12-1.4.0
+FROM ghcr.io/openwallet-foundation/acapy-agent:py3.13-1.5.1
 
 USER root
 
-RUN pip install git+https://github.com/openwallet-foundation/acapy-plugins@1.4.0#subdirectory=webvh
+RUN pip install git+https://github.com/openwallet-foundation/acapy-plugins@1.5.1#subdirectory=webvh
 
-ADD https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 ./jq
+ADD https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-linux64 ./jq
 RUN chmod +x ./jq
 COPY ngrok-wait.sh ngrok-wait.sh
 RUN chmod +x ./ngrok-wait.sh
