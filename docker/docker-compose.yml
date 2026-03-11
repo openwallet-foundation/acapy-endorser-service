@@ -94,7 +94,7 @@ services:
       - endorser-net
 
   acapy-endorser-wallet:
-    image: postgres:16-alpine
+    image: postgres:17-alpine
     environment:
       POSTGRES_USER: ${WALLET_POSTGRESQL_USER}
       POSTGRES_PASSWORD: ${WALLET_POSTGRESQL_PASSWORD}
@@ -173,7 +173,7 @@ services:
       - endorser-net
 
   acapy-endorser-api-db:
-    image: postgres:16-alpine
+    image: postgres:17-alpine
     environment:
       - POSTGRES_USER=${POSTGRESQL_USER}
       - POSTGRES_PASSWORD=${POSTGRESQL_PASSWORD}
@@ -268,7 +268,7 @@ services:
       - endorser-net
 
   acapy-author-wallet:
-    image: postgres:16-alpine
+    image: postgres:17-alpine
     environment:
       POSTGRES_USER: ${AUTHOR_WALLET_POSTGRESQL_USER}
       POSTGRES_PASSWORD: ${AUTHOR_WALLET_POSTGRESQL_PASSWORD}

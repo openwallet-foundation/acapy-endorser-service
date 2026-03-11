@@ -60,7 +60,7 @@ services:
       - host.docker.internal:host-gateway
 
   webvh-endorser-db:
-    image: postgres:16-alpine
+    image: postgres:17-alpine
     environment:
       - POSTGRES_USER=${POSTGRESQL_USER}
       - POSTGRES_PASSWORD=${POSTGRESQL_PASSWORD}
