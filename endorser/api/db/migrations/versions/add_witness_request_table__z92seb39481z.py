@@ -37,7 +37,7 @@ def upgrade():
             server_default=sa.text("now()"),
             nullable=False,
         ),
-        sa.Column("record_id", sqlmodel.sql.sqltypes.GUID(), nullable=False),
+        sa.Column("record_id", sa.Uuid(), nullable=False),
         sa.Column("record_type", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("scid", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("domain", sqlmodel.sql.sqltypes.AutoString(), nullable=False),

@@ -42,7 +42,7 @@ def upgrade():
         ),
         sa.Column("author_status", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("endorse_status", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column("connection_id", sqlmodel.sql.sqltypes.GUID(), nullable=False),
+        sa.Column("connection_id", sa.Uuid(), nullable=False),
         sa.Column(
             "connection_protocol", sqlmodel.sql.sqltypes.AutoString(), nullable=False
         ),
@@ -75,8 +75,8 @@ def upgrade():
             server_default=sa.text("now()"),
             nullable=False,
         ),
-        sa.Column("transaction_id", sqlmodel.sql.sqltypes.GUID(), nullable=False),
-        sa.Column("connection_id", sqlmodel.sql.sqltypes.GUID(), nullable=False),
+        sa.Column("transaction_id", sa.Uuid(), nullable=False),
+        sa.Column("connection_id", sa.Uuid(), nullable=False),
         sa.Column("endorser_did", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
         sa.Column("author_did", sqlmodel.sql.sqltypes.AutoString(), nullable=True),
         sa.Column(
