@@ -31,11 +31,7 @@ starlette-context = "^0.5.1"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^4.5.1"
-# Sync with version in .pre-commit-config.yaml
 ruff = "^0.15.5"
-# Sync with version in .github/workflows/blackformat.yml
-# Sync with version in .pre-commit-config.yaml
-black = "^26.3.0"
 
 # testing
 behave = "^1.3.3"
@@ -69,6 +65,11 @@ include = ["endorser/**/*.py"]
 line-length = 90
 
 exclude = ["migrations"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
 [tool.ruff.lint.per-file-ignores]
 "**/{tests}/*" = ["B006", "D", "E501", "F841"]
 

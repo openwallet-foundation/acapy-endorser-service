@@ -14,7 +14,6 @@
     "vscode": {
       "extensions": [
         "ms-python.python",
-        "ms-python.black-formatter",
         "charliermarsh.ruff",
         "tamasfe.even-better-toml"
       ],
@@ -31,13 +30,7 @@
             "source.fixAll": true,
             "source.organizeImports": true
           },
-          "editor.defaultFormatter": "ms-python.black-formatter",
-          "ruff.organizeImports": false
-        },
-        "black-formatter.importStrategy": "useBundled",
-        "black-formatter.showNotifications": "always",
-        "ruff.codeAction.fixViolation": {
-          "enable": true
+          "editor.defaultFormatter": "charliermarsh.ruff"
         },
         "ruff.fixAll": true
       }

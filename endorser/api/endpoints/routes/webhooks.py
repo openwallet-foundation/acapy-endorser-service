@@ -82,10 +82,8 @@ async def process_webhook(
 ):
     """Called by aca-py agent."""
     if topic == WebhookTopicType.out_of_band:
-        oob_id = payload.get('oob_id')
-        logger.info(
-            f">>> Called webhook for endorser: {topic.name} / {oob_id}"
-        )
+        oob_id = payload.get("oob_id")
+        logger.info(f">>> Called webhook for endorser: {topic.name} / {oob_id}")
         return {}
     state = payload.get("state")
     if state:
