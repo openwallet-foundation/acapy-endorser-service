@@ -27,7 +27,7 @@ python-jose = {version = "^3.5.0", extras = ["cyptography"]}
 requests = "^2.32.5"
 SQLAlchemy = {version = "^2.0.48", extras = ["asyncio"]}
 sqlmodel = "0.0.19" # see https://github.com/fastapi/sqlmodel/discussions/1048 before upgrading
-starlette-context = "^0.3.6"
+starlette-context = "^0.5.1"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "~3.8.0"
