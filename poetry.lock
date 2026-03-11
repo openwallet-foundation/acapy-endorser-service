@@ -338,7 +338,6 @@ develop = ["PyHamcrest (<2.0) ; python_version < \"3.0\"", "PyHamcrest (>=2.0.2)
 docs = ["furo (>=2024.4.27) ; python_version >= \"3.8\"", "sphinx (>=1.6,<4.4) ; python_version < \"3.7\"", "sphinx (>=7.4.0) ; python_version >= \"3.7\"", "sphinx-copybutton (>=0.5.2) ; python_version >= \"3.7\"", "sphinxcontrib-applehelp (>=1.0.8) ; python_version >= \"3.7\"", "sphinxcontrib-htmlhelp (>=2.0.5) ; python_version >= \"3.7\""]
 formatters = ["behave-html-formatter (>=0.9.10) ; python_version >= \"3.6\"", "behave-html-pretty-formatter (>=1.9.1) ; python_version >= \"3.6\""]
 testing = ["PyHamcrest (<2.0) ; python_version < \"3.0\"", "PyHamcrest (>=2.0.2) ; python_version >= \"3.0\"", "assertpy (>=1.1)", "chardet", "freezegun (>=1.5.1) ; python_version > \"3.7\"", "mock (<4.0) ; python_version < \"3.6\"", "mock (>=4.0) ; python_version >= \"3.6\"", "path (>=13.1.0) ; python_version >= \"3.5\"", "path.py (>=11.5.0,<13.0) ; python_version < \"3.5\"", "pytest (<5.0) ; python_version < \"3.0\"", "pytest (>=5.0) ; python_version >= \"3.0\"", "pytest-html (>=1.19.0,<2.0) ; python_version < \"3.0\"", "pytest-html (>=2.0) ; python_version >= \"3.0\""]
-
 [[package]]
 name = "certifi"
 version = "2026.1.4"
