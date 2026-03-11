@@ -20,7 +20,7 @@ python = "^3.13"
 aiohttp = "^3.13.3"
 alembic = "^1.18.4"
 asyncpg = "^0.31.0"
-fastapi = {version = "^0.119.0", extras = ["standard"]}
+fastapi = {version = "^0.135.1", extras = ["standard"]}
 psycopg2-binary = "^2.9.11"
 pydantic-settings = "^2.13.1"
 python-jose = {version = "^3.5.0", extras = ["cyptography"]}
