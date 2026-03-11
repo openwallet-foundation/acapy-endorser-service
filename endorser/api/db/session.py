@@ -15,8 +15,7 @@ engine = create_async_engine(
     echo=settings.DB_ECHO_LOG,
     echo_pool=settings.DB_ECHO_LOG,
     pool_size=20,
-    future=True,
 )
 async_session = sessionmaker(
-    engine, class_=AsyncSession, expire_on_commit=False, future=True
+    engine, class_=AsyncSession, expire_on_commit=False
 )
