@@ -92,6 +92,15 @@ async def process_webhook(
         logger.info(f">>> Called webhook for endorser: {topic.name}")
     logger.debug(f">>> payload: {payload}")
 
+    # log-entry from webvh plugin: treat as pending if we have record_id but no state
+    if topic == WebhookTopicType.log_entry:
+        logger.info(
+            ">>> Received log_entry webhook from agent (confirming webhook delivery)"
+        )
+    if topic == WebhookTopicType.log_entry and not state and payload.get("record_id"):
+        state = "pending"
+        logger.info(f">>> Using state=pending for log-entry webhook (record_id present)")
+
     # call the handler to process the hook, if present
     result = {}
     try:

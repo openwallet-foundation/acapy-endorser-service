@@ -94,21 +94,13 @@ async def approve_request(db: AsyncSession, request: WitnessRequest):
         db, request.record_id
     )
 
-    # witness request and tell aca-py
-    if request.record_type == "log-entry":
-        cast(
-            dict,
-            await au.acapy_POST(
-                f"did/webvh/witness-requests/log-entry/{request.record_id}"
-            ),
-        )
-    elif request.record_type == "attested-resource":
-        cast(
-            dict,
-            await au.acapy_POST(
-                f"did/webvh/witness-requests/attested-resource/{request.record_id}"
-            ),
-        )
+    # Tell aca-py plugin to approve (unified /requests/ API)
+    cast(
+        dict,
+        await au.acapy_POST(
+            f"did/webvh/requests/{request.record_type}/{request.record_id}"
+        ),
+    )
 
     # update local db state
     db_record.state = "witnessed"
@@ -127,21 +119,18 @@ async def reject_request(db: AsyncSession, request: WitnessRequest):
         db, request.record_id
     )
 
-    # reject request and tell aca-py
-    if request.record_type == "log-entry":
-        cast(
-            dict,
-            await au.acapy_DELETE(
-                f"did/webvh/witness-requests/log-entry/{request.record_id}"
-            ),
+    # Tell aca-py plugin to reject (unified /requests/ API)
+    path = f"did/webvh/requests/{request.record_type}/{request.record_id}"
+    try:
+        response = await au.acapy_DELETE(path)
+        logger.info(
+            ">>> acapy DELETE %s response: %s", path, response
         )
-    elif request.record_type == "attested-resource":
-        cast(
-            dict,
-            await au.acapy_DELETE(
-                f"did/webvh/witness-requests/attested-resource/{request.record_id}"
-            ),
+    except Exception as e:
+        logger.error(
+            ">>> acapy DELETE %s failed: %s", path, e, exc_info=True
         )
+        raise
 
     # update local db state
     db_record.state = "rejected"
