@@ -99,7 +99,7 @@ async def process_webhook(
         )
     if topic == WebhookTopicType.log_entry and not state and payload.get("record_id"):
         state = "pending"
-        logger.info(f">>> Using state=pending for log-entry webhook (record_id present)")
+        logger.info(">>> Using state=pending for log-entry webhook (record_id present)")
 
     # call the handler to process the hook, if present
     result = {}

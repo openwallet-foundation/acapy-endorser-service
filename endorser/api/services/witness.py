@@ -123,13 +123,9 @@ async def reject_request(db: AsyncSession, request: WitnessRequest):
     path = f"did/webvh/requests/{request.record_type}/{request.record_id}"
     try:
         response = await au.acapy_DELETE(path)
-        logger.info(
-            ">>> acapy DELETE %s response: %s", path, response
-        )
+        logger.info(">>> acapy DELETE %s response: %s", path, response)
     except Exception as e:
-        logger.error(
-            ">>> acapy DELETE %s failed: %s", path, e, exc_info=True
-        )
+        logger.error(">>> acapy DELETE %s failed: %s", path, e, exc_info=True)
         raise
 
     # update local db state
