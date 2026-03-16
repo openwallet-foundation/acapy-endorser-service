@@ -7,7 +7,6 @@ Create Date: 2024-01-02 23:41:41.952565
 """
 from alembic import op
 import sqlalchemy as sa
-import sqlmodel
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
@@ -34,11 +33,11 @@ def upgrade():
             server_default=sa.text("now()"),
             nullable=False,
         ),
-        sa.Column("issuer_did", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column("author_did", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column("schema_name", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column("version", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column("tag", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+        sa.Column("issuer_did", sa.String(), nullable=False),
+        sa.Column("author_did", sa.String(), nullable=False),
+        sa.Column("schema_name", sa.String(), nullable=False),
+        sa.Column("version", sa.String(), nullable=False),
+        sa.Column("tag", sa.String(), nullable=False),
         sa.Column("rev_reg_def", sa.Boolean(), nullable=False),
         sa.Column("rev_reg_entry", sa.Boolean(), nullable=False),
         sa.PrimaryKeyConstraint("allowed_cred_def_id"),
@@ -57,7 +56,7 @@ def upgrade():
             server_default=sa.text("now()"),
             nullable=False,
         ),
-        sa.Column("registered_did", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+        sa.Column("registered_did", sa.String(), nullable=False),
         sa.PrimaryKeyConstraint("registered_did"),
     )
     op.create_table(
@@ -75,21 +74,21 @@ def upgrade():
             server_default=sa.text("now()"),
             nullable=False,
         ),
-        sa.Column("author_did", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column("schema_name", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
-        sa.Column("version", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+        sa.Column("author_did", sa.String(), nullable=False),
+        sa.Column("schema_name", sa.String(), nullable=False),
+        sa.Column("version", sa.String(), nullable=False),
         sa.PrimaryKeyConstraint("allowed_schema_id"),
     )
     op.add_column(
         "endorserequest",
         sa.Column(
-            "author_goal_code", sqlmodel.sql.sqltypes.AutoString(), nullable=True
+            "author_goal_code", sa.String(), nullable=True
         ),
     )
     op.add_column(
         "endorserequest",
         sa.Column(
-            "ledger_txn_request", sqlmodel.sql.sqltypes.AutoString(), nullable=True
+            "ledger_txn_request", sa.String(), nullable=True
         ),
     )
     # ### end Alembic commands ###
