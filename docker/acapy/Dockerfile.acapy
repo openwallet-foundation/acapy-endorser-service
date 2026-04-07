@@ -1,8 +1,8 @@
-FROM ghcr.io/openwallet-foundation/acapy-agent:py3.13-1.5.1
+FROM ghcr.io/openwallet-foundation/acapy-agent:py3.13-1.6.0
 
 USER root
 
-RUN pip install git+https://github.com/openwallet-foundation/acapy-plugins@1.5.1#subdirectory=webvh
+RUN pip install git+https://github.com/openwallet-foundation/acapy-plugins@1.6.0#subdirectory=webvh
 
 ADD https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-linux64 ./jq
 RUN chmod +x ./jq
