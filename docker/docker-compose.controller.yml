@@ -50,7 +50,6 @@ services:
       - ENDORSER_PUBLIC_NAME=${ENDORSER_PUBLIC_NAME}
       - ENDORSER_PUBLIC_DESC=${ENDORSER_PUBLIC_DESC}
       - DEBUGGER=${DEBUGGER:-false}
-      - SQLALCHEMY_WARN_20=1
     volumes:
       - ../endorser:/app:rw
     ports:
