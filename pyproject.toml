@@ -26,7 +26,7 @@ pydantic-settings = "^2.13.1"
 python-jose = {version = "^3.5.0", extras = ["cryptography"]}
 requests = "^2.33.1"
 SQLAlchemy = {version = "^2.0.49", extras = ["asyncio"]}
-sqlmodel = "^0.0.38"
+sqlmodel = ">=0.0.38,<0.0.40"
 starlette-context = "^0.5.1"
 
 # Transitive dependency overrides to resolve known vulnerabilities
