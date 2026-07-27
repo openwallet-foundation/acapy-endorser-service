@@ -39,7 +39,7 @@ starlette = "^1.3.1"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^4.6.0"
-ruff = "^0.15.20"
+ruff = ">=0.15.20,<0.17.0"
 
 # testing
 behave = "^1.3.3"
