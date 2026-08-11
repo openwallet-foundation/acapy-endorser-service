@@ -17,12 +17,12 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.14"
-aiohttp = "^3.14.1"
-alembic = "^1.18.5"
+aiohttp = "^3.14.3"
+alembic = "^1.19.1"
 asyncpg = "^0.31.0"
-fastapi = {version = "^0.138.0", extras = ["standard"]}
+fastapi = {version = "^0.141.1", extras = ["standard"]}
 psycopg2-binary = "^2.9.12"
-pydantic-settings = "^2.14.2"
+pydantic-settings = "^2.15.0"
 python-jose = {version = "^3.5.0", extras = ["cryptography"]}
 requests = "^2.34.2"
 SQLAlchemy = {version = "^2.0.51", extras = ["asyncio"]}
@@ -30,7 +30,7 @@ sqlmodel = "^0.0.39"
 starlette-context = "^0.5.1"
 
 # Transitive dependency overrides to resolve known vulnerabilities
-cryptography = "^49.0.0"
+cryptography = "^50.0.0"
 ecdsa = "^0.19.2"
 pyasn1 = "^0.6.3"
 pygments = "^2.20.0"
@@ -38,8 +38,8 @@ python-multipart = "^0.0.32"
 starlette = "^1.3.1"
 
 [tool.poetry.group.dev.dependencies]
-pre-commit = "^4.6.0"
-ruff = "^0.15.20"
+pre-commit = "^4.6.2"
+ruff = "^0.16.2"
 
 # testing
 behave = "^1.3.3"
