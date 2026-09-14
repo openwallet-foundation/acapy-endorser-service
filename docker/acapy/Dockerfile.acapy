@@ -1,4 +1,4 @@
-FROM ghcr.io/openwallet-foundation/acapy-agent:py3.13-1.6.1
+FROM ghcr.io/openwallet-foundation/acapy-agent:py3.13-1.7.0
 
 USER root
 
