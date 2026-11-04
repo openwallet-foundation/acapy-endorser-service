@@ -159,7 +159,7 @@ class GlobalConfig(BaseSettings):
     )
     # migrations connection uses owner role and is synchronous
     SQLALCHEMY_DATABASE_ADMIN_URI: str = (
-        f"postgresql://{PSQL_ADMIN_USER}:{PSQL_ADMIN_PASS}@{PSQL_HOST}:{PSQL_PORT}/{PSQL_DB}"  # noqa: E501
+        f"postgresql+psycopg://{PSQL_ADMIN_USER}:{PSQL_ADMIN_PASS}@{PSQL_HOST}:{PSQL_PORT}/{PSQL_DB}"  # noqa: E501
     )
     # fmt: on
 

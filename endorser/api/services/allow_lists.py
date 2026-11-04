@@ -3,7 +3,7 @@
 import logging
 from typing import TypeVar
 
-from psycopg2.errors import UniqueViolation
+from psycopg.errors import UniqueViolation
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession

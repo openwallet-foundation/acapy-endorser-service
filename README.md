@@ -104,7 +104,7 @@ ENDORSER_ENV=testing ACAPY_ENDPOINT=http://host.docker.internal:8050 ./manage st
 
 Note that as of the latest version all connection_id's in the contact table is expected to be unique. If upgrading fails with an error similar to 
 ```
-sqlalchemy.exc.IntegrityError: (psycopg2.errors.UniqueViolation) could not create unique index "contact_connection_id_key"
+sqlalchemy.exc.IntegrityError: (psycopg.errors.UniqueViolation) could not create unique index "contact_connection_id_key"
 ```
 then you will need to manually delete these duplicate entries. To list them you can perform the following sql query
 
