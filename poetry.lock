@@ -1073,18 +1073,19 @@ idna = ">=2.0.0"
 
 [[package]]
 name = "fastapi"
-version = "0.162.0"
+version = "0.162.5"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "fastapi-0.162.0-py3-none-any.whl", hash = "sha256:3785963de305dd09912426cb81f2d230fce98ab3521cdfe97265c8d14983128c"},
-    {file = "fastapi-0.162.0.tar.gz", hash = "sha256:6a22c1e2e6e32e0633ee7e170f00009a29b8228b16feb219ee42f32fd8d88a8f"},
+    {file = "fastapi-0.162.5-py3-none-any.whl", hash = "sha256:5303c67415fde762889ca337db79d27b755b8bd09cef314fa7a4340bb30bfd2b"},
+    {file = "fastapi-0.162.5.tar.gz", hash = "sha256:1ca37f64f61c99cebd38636e67525fb721c5e8c1169f07f2a35d73b0a63265d4"},
 ]
 
 [package.dependencies]
 annotated-doc = ">=0.0.2"
+anyio = ">=4.1.0"
 email-validator = {version = ">=2.0.0", optional = true, markers = "extra == \"standard\""}
 fastapi-cli = {version = ">=0.0.32", extras = ["standard"], optional = true, markers = "extra == \"standard\""}
 fastar = {version = ">=0.9.0", optional = true, markers = "extra == \"standard\""}
